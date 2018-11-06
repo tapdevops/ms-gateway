@@ -1,0 +1,80 @@
+/**
+ * Microservices Gateway
+ *
+ * @description :: Untuk mengatur microservice lainnya
+ * @author      :: Ferdinand
+ * @date        :: 06 November 2018
+ */
+
+require('express-group-routes'); 						// Express Group Routes
+const express = require( 'express' );					// Import Express
+const mongoose = require( 'mongoose' );					// Import Mongoose
+const bodyParser = require( 'body-parser' ); 			// Import Body Parser
+let Client = require('node-rest-client').Client; 		// Import REST Client
+var bcrypt = require( 'bcryptjs' ); 					// Import Bcrypt
+var jwt = require( 'jsonwebtoken' ); 					// Import JSON Web Token
+const app = express(); 									// Define App
+const config = require( './config/config.js' ); 		// Config
+const dbConfig = require( './config/database.js' ); 	// Database Config
+
+// Setup Database
+mongoose.Promise = global.Promise;
+
+// Connecting to the database
+mongoose.connect( dbConfig.url, {
+	useNewUrlParser: true,
+	ssl: true
+} ).then( () => {
+	console.log( 'Successfully connected to the Database' );
+} ).catch( err => {
+	console.log( 'Could not connect to the Database. Exiting application.' )
+} );
+
+// Parse request of content-type - application/x-www-form-urlencoded
+app.use( bodyParser.urlencoded( { extended: true } ) );
+
+// Parse request of content-type - application/json
+app.use( bodyParser.json() );
+
+app.post( '/test', async ( req, res ) => {
+	var data = {
+		national:"NATIONAL",
+		region_code:"02",
+		comp_code:"21",
+		est_code:"31",
+		werks:"2131",
+		sub_ba_code:"",
+		kebun_code:"",
+		afd_code:"C",
+		afd_name:"Ferdinand",
+		block_code:"070",
+		block_name:"E30",
+		block_code_gis:"2131070"
+	};
+
+	var client = new Client();
+
+	var url = 'http://tap-api-masterdata.openode.io/api/block';
+	var args = {
+		data: data,
+		headers: { "Content-Type": "application/json" }
+	};
+	
+	client.post( url, args, function ( data, response ) {
+		res.json({data});
+	});
+
+});
+
+// Server Running Message
+app.listen( config.app_port, () => {
+	console.log( config.app_name + ' running on ' + config.app_port )
+} );
+
+// Routes
+app.get( '/', ( req, res ) => {
+	res.json( { 'message': config.app_name } )
+} );
+
+// Routes
+require( './routes/route.js' )( app );
