@@ -26,4 +26,5 @@ module.exports = ( app ) => {
 	//app.get( '/api/test', verifyToken, auth.test );
 	app.get( '/api/inspection', verifyToken, inspection.find );
 	app.post( '/api/inspection', verifyToken, inspection.create );
+	app.get( 'api/masterdata/block', verifyToken, masterdata.blockFind );
 }
