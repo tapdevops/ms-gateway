@@ -49,6 +49,23 @@ app.post( '/api/login', ( req, res ) => {
 
 	if ( req.body.username && req.body.password ) {
 
+		var client = new Client();
+		var url = config.url.microservices.ldap;
+		var args = {
+			data: {
+				username: req.body.username,
+				password: req.body.password
+			},
+			headers: { "Content-Type": "application/json" }
+		};
+		var datas = {};
+		client.post( url, args, function ( data, response ) {
+			res.json( { data } );
+			datas = data;
+		});
+		console.log( datas );
+		/*
+
 		// Login LDAP
 		const LDAPStatus = true;
 
@@ -111,6 +128,7 @@ app.post( '/api/login', ( req, res ) => {
 				data: {}
 			} );
 		}
+		*/
 	}
 	else {
 		res.status( 400 ).send( {

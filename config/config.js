@@ -7,7 +7,8 @@ module.exports = {
 			inspection: 'http://localhost:3002/api/inspection',
 			masterdata: {
 				block: ''
-			}
+			},
+			ldap: 'http://tap-ldapdev.tap-agri.com/login'
 		}
 	}
 }
