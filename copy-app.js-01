@@ -17,6 +17,7 @@ const app = express(); 									// Define App
 const config = require( './config/config.js' ); 		// Config
 const dbConfig = require( './config/database.js' ); 	// Database Config
 
+
 // Setup Database
 mongoose.Promise = global.Promise;
 
