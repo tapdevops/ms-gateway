@@ -58,12 +58,69 @@ app.post( '/api/login', ( req, res ) => {
 			},
 			headers: { "Content-Type": "application/json" }
 		};
-		var datas = {};
+		
 		client.post( url, args, function ( data, response ) {
-			res.json( { data } );
-			datas = data;
+			if ( data.status == true ) {
+				const loginModel = require( './app/models/login.js' );
+				const loginData = {};
+
+				loginModel.findOne( { 
+					USERNAME: req.body.username 
+				} ).then( data => {
+					
+					if( !data ) {
+						return res.status( 404 ).send({
+							status: false,
+							message: "Data anda belum terdaftar dalam database",
+							data: {}
+						});
+					}
+
+					logdata = {
+						"USERNAME": data.USERNAME,
+						"USER_AUTH_CODE": data.USER_AUTH_CODE,
+						"EMPLOYEE_NIK": data.EMPLOYEE_NIK
+					}
+
+					let token = jwt.sign( { username: req.body.username }, config.secret_key, { expiresIn: '24h' } );
+
+					console.log(logdata);
+
+					res.send( {
+						status: true,
+						message: 'Authentication successful!',
+						data: {
+							token: token,
+							login: logdata
+						}
+					} );
+
+
+				} ).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.status( 404 ).send({
+							status: false,
+							message: "Error retrieving user 2",
+							data: {}
+						});
+					}
+					return res.status( 500 ).send({
+						status: false,
+						message: "Error retrieving user",
+						data: {}
+					} );
+				} );
+
+			}
+			else {
+				res.status( 403 ).send( {
+					status: false,
+					message: 'Invalid credentials',
+					data: {}
+				} );
+			}
+		
 		});
-		console.log( datas );
 		/*
 
 		// Login LDAP
