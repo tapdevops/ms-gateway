@@ -3,6 +3,7 @@ const config = require( '../../config/config.js' );
 let jwt = require( 'jsonwebtoken' );
 
 exports.blockFind = async ( req, res ) => {
+	console.log(config.url.microservices.masterdata_block)
 	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
@@ -10,6 +11,27 @@ exports.blockFind = async ( req, res ) => {
 		else {
 			var client = new Client();
 			var url = config.url.microservices.masterdata_block;
+			var args = {
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.get( url, args, function (data, response) {
+				// parsed response body as js object
+				res.json( { data } );
+			});
+		}
+	} );
+};
+
+exports.afdelingFind = async ( req, res ) => {
+	console.log(config.url.microservices.masterdata_block)
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_afdeling;
 			var args = {
 				headers: { "Content-Type": "application/json" }
 			};
