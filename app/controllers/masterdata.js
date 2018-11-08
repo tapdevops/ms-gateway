@@ -2,31 +2,11 @@ const Client = require('node-rest-client').Client; 				// Import REST Client
 const config = require( '../../config/config.js' );
 let jwt = require( 'jsonwebtoken' );
 
-// BLOCK - FIND
-exports.blockFind = async ( req, res ) => {
-	console.log(config.url.microservices.masterdata_block)
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
-		if ( err ) {
-			res.sendStatus( 403 );
-		}
-		else {
-			var client = new Client();
-			var url = config.url.microservices.masterdata_block;
-			var args = {
-				headers: { "Content-Type": "application/json" }
-			};
-
-			client.get( url, args, function (data, response) {
-				// parsed response body as js object
-				res.json( { data } );
-			});
-		}
-	} );
-};
-
 // AFDELING - FIND
 exports.afdelingFind = async ( req, res ) => {
-	console.log(config.url.microservices.masterdata_block)
+	url_query = req.query;
+	var url_query_length = Object.keys( url_query ).length;
+
 	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
@@ -34,6 +14,11 @@ exports.afdelingFind = async ( req, res ) => {
 		else {
 			var client = new Client();
 			var url = config.url.microservices.masterdata_afdeling;
+
+			if ( url_query_length > 0 ) {
+				url = url + req._parsedUrl.search;
+			}
+			
 			var args = {
 				headers: { "Content-Type": "application/json" }
 			};
@@ -46,7 +31,7 @@ exports.afdelingFind = async ( req, res ) => {
 	} );
 };
 
-// AFDELING - POST
+// AFDELING - CREATE
 exports.afdelingCreate = async ( req, res ) => {
 	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
@@ -61,6 +46,96 @@ exports.afdelingCreate = async ( req, res ) => {
 			};
 
 			client.post( url, args, function ( data, response ) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
+
+// BLOCK - FIND ONE
+exports.afdelingFindOne = async ( req, res ) => { 
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_afdeling + '/' + req.params.id;
+			var args = {
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.get( url, args, function (data, response) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
+
+// BLOCK - FIND
+exports.blockFind = async ( req, res ) => {
+	url_query = req.query;
+	var url_query_length = Object.keys( url_query ).length;
+
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_block;
+
+			if ( url_query_length > 0 ) {
+				url = url + req._parsedUrl.search;
+			}
+
+			var args = {
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.get( url, args, function (data, response) {
+				// parsed response body as js object
+				res.json( { data } );
+			});
+		}
+	} );
+};
+
+// BLOCK - CREATE
+exports.blockCreate = async ( req, res ) => {
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_block;
+			var args = {
+				data: req.body,
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.post( url, args, function ( data, response ) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
+
+// BLOCK - FIND ONE
+exports.blockFindOne = async ( req, res ) => { 
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_block + '/' + req.params.id;
+			var args = {
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.get( url, args, function (data, response) {
 				res.json( { data } );
 			});
 		}
