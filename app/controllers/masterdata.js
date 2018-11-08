@@ -52,7 +52,7 @@ exports.afdelingCreate = async ( req, res ) => {
 	} );
 }
 
-// BLOCK - FIND ONE
+// AFDELING - FIND ONE
 exports.afdelingFindOne = async ( req, res ) => { 
 	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
@@ -66,6 +66,48 @@ exports.afdelingFindOne = async ( req, res ) => {
 			};
 
 			client.get( url, args, function (data, response) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
+
+// AFDELING - FIND ONE
+exports.afdelingUpdate = async ( req, res ) => { 
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_afdeling + '/' + req.params.id;
+			var args = {
+				data: req.body,
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.put( url, args, function ( data, response ) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
+
+// AFDELING - DELETE
+exports.afdelingDelete = async ( req, res ) => { 
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_afdeling + '/' + req.params.id;
+			var args = {
+				headers: { "Content-Type": "application/json" }
+			};
+
+			console.log( req );
+			client.delete( url, args, function (data, response) {
 				res.json( { data } );
 			});
 		}
@@ -142,7 +184,46 @@ exports.blockFindOne = async ( req, res ) => {
 	} );
 }
 
+// BLOCK - FIND ONE
+exports.blockUpdate = async ( req, res ) => { 
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_block + '/' + req.params.id;
+			var args = {
+				data: req.body,
+				headers: { "Content-Type": "application/json" }
+			};
 
+			client.put( url, args, function ( data, response ) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
+
+// BLOCK - DELETE
+exports.blockDelete = async ( req, res ) => { 
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			var client = new Client();
+			var url = config.url.microservices.masterdata_block + '/' + req.params.id;
+			var args = {
+				headers: { "Content-Type": "application/json" }
+			};
+
+			client.delete( url, args, function (data, response) {
+				res.json( { data } );
+			});
+		}
+	} );
+}
 
 /*
 app.post( '/test', async ( req, res ) => {

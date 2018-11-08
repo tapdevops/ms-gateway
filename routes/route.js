@@ -34,10 +34,14 @@ module.exports = ( app ) => {
 	app.get( '/api/masterdata/block', verifyToken, masterdata.blockFind );
 	app.get( '/api/masterdata/block/:id', verifyToken, masterdata.blockFindOne );
 	app.post( '/api/masterdata/block', verifyToken, masterdata.blockCreate );
+	app.put( '/api/masterdata/block/:id', verifyToken, masterdata.blockUpdate );
+	app.delete( '/api/masterdata/block/:id', verifyToken, masterdata.blockDelete );
 	
 	// ROUTE - MASTERDATA AFDELING
 	app.get( '/api/masterdata/afdeling', verifyToken, masterdata.afdelingFind );
 	app.get( '/api/masterdata/afdeling/:id', verifyToken, masterdata.afdelingFindOne );
 	app.post( '/api/masterdata/afdeling', verifyToken, masterdata.afdelingCreate );
+	app.put( '/api/masterdata/afdeling/:id', verifyToken, masterdata.afdelingUpdate );
+	app.delete( '/api/masterdata/afdeling/:id', verifyToken, masterdata.afdelingDelete );
 
 }
