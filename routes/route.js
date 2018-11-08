@@ -29,4 +29,5 @@ module.exports = ( app ) => {
 	app.get( '/api/masterdata/block', verifyToken, masterdata.blockFind );
 	
 	app.get( '/api/masterdata/afdeling', verifyToken, masterdata.afdelingFind );
+	app.post( '/api/masterdata/afdeling', verifyToken, masterdata.afdelingCreate );
 }
