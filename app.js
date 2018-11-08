@@ -59,11 +59,12 @@ app.post( '/api/login', ( req, res ) => {
 		
 		client.post( url, args, function ( data, response ) {
 			if ( data.status == true ) {
+				console.log(req.body);
 				const loginModel = require( './app/models/login.js' );
 				const loginData = {};
 
 				loginModel.findOne( { 
-					USERNAME: req.body.username 
+					USERNAME: req.body.username
 				} ).then( data => {
 					
 					if( !data ) {
@@ -93,6 +94,8 @@ app.post( '/api/login', ( req, res ) => {
 						}
 					} );
 
+					console.log( '3' );
+
 
 				} ).catch( err => {
 					if( err.kind === 'ObjectId' ) {
@@ -101,7 +104,9 @@ app.post( '/api/login', ( req, res ) => {
 							message: "Error retrieving user 2",
 							data: {}
 						});
+						console.log( '2' );
 					}
+					console.log( '1' );
 					return res.status( 500 ).send({
 						status: false,
 						message: "Error retrieving user",
