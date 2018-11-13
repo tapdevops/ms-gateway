@@ -19,29 +19,40 @@ module.exports = ( app ) => {
 
 	// Declare Controllers
 	//const auth = require( '../app/controllers/auth.js' );
-	const inspection = require( '../app/controllers/inspection.js' );
-	const masterdata = require( '../app/controllers/masterdata.js' );
+	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
+	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
+	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
+	const syncList = require( '../app/controllers/syncList.js' );
+	const test = require( '../app/controllers/test.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
 	//app.get( '/api/test', verifyToken, auth.test );
 
 	// ROUTE - INSPECTION
-	app.get( '/api/inspection', verifyToken, inspection.find );
-	app.post( '/api/inspection', verifyToken, inspection.create );
+	app.get( '/api/inspection', verifyToken, microserviceInspection.find );
+	app.post( '/api/inspection', verifyToken, microserviceInspection.create );
 
 	// ROUTE - MASTERDATA BLOCK
-	app.get( '/api/masterdata/block', verifyToken, masterdata.blockFind );
-	app.get( '/api/masterdata/block/:id', verifyToken, masterdata.blockFindOne );
-	app.post( '/api/masterdata/block', verifyToken, masterdata.blockCreate );
-	app.put( '/api/masterdata/block/:id', verifyToken, masterdata.blockUpdate );
-	app.delete( '/api/masterdata/block/:id', verifyToken, masterdata.blockDelete );
+	app.get( '/api/masterdata/block', verifyToken, microserviceMasterdata.blockFind );
+	app.get( '/api/masterdata/block/:id', verifyToken, microserviceMasterdata.blockFindOne );
+	app.post( '/api/masterdata/block', verifyToken, microserviceMasterdata.blockCreate );
+	app.put( '/api/masterdata/block/:id', verifyToken, microserviceMasterdata.blockUpdate );
+	app.delete( '/api/masterdata/block/:id', verifyToken, microserviceMasterdata.blockDelete );
 	
 	// ROUTE - MASTERDATA AFDELING
-	app.get( '/api/masterdata/afdeling', verifyToken, masterdata.afdelingFind );
-	app.get( '/api/masterdata/afdeling/:id', verifyToken, masterdata.afdelingFindOne );
-	app.post( '/api/masterdata/afdeling', verifyToken, masterdata.afdelingCreate );
-	app.put( '/api/masterdata/afdeling/:id', verifyToken, masterdata.afdelingUpdate );
-	app.delete( '/api/masterdata/afdeling/:id', verifyToken, masterdata.afdelingDelete );
+	app.get( '/api/masterdata/afdeling', verifyToken, microserviceMasterdata.afdelingFind );
+	app.get( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingFindOne );
+	app.post( '/api/masterdata/afdeling', verifyToken, microserviceMasterdata.afdelingCreate );
+	app.put( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
+	app.delete( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
+
+	// ROUTE - TEST
+	app.get( '/api-test/db-check', test.dbCheck );
+
+	// ROUTE - EMPLOYEE HRIS
+	app.post( '/sync/global/employee-hris/create-or-update', employeeHRIS.createOrUpdate );
+	app.post( '/sync/list', syncList.create );
+
 
 }

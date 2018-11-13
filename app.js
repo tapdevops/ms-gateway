@@ -32,7 +32,7 @@ mongoose.connect( dbConfig.url, {
 } );
 
 // Parse request of content-type - application/x-www-form-urlencoded
-app.use( bodyParser.urlencoded( { extended: true } ) );
+app.use( bodyParser.urlencoded( { extended: false } ) );
 
 // Parse request of content-type - application/json
 app.use( bodyParser.json() );
@@ -60,6 +60,10 @@ app.post( '/api/login', ( req, res ) => {
 		client.post( url, args, function ( data, response ) {
 			if ( data.status == true ) {
 				console.log(req.body);
+
+				// Check Employee HRIS
+
+				/*
 				const loginModel = require( './app/models/login.js' );
 				const loginData = {};
 
@@ -70,7 +74,7 @@ app.post( '/api/login', ( req, res ) => {
 					if( !data ) {
 						return res.status( 404 ).send({
 							status: false,
-							message: "Data anda belum terdaftar dalam database",
+							message: "Data anda belum terdaftar dalam database, silahkan hubungi Administrator",
 							data: {}
 						});
 					}
@@ -96,7 +100,6 @@ app.post( '/api/login', ( req, res ) => {
 
 					console.log( '3' );
 
-
 				} ).catch( err => {
 					if( err.kind === 'ObjectId' ) {
 						return res.status( 404 ).send({
@@ -113,7 +116,7 @@ app.post( '/api/login', ( req, res ) => {
 						data: {}
 					} );
 				} );
-
+				*/
 			}
 			else {
 				res.status( 403 ).send( {
