@@ -22,8 +22,6 @@ module.exports = ( app ) => {
 	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
 	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
 	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
-	const syncList = require( '../app/controllers/syncList.js' );
-	const test = require( '../app/controllers/test.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -47,12 +45,8 @@ module.exports = ( app ) => {
 	app.put( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
 	app.delete( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
 
-	// ROUTE - TEST
-	app.get( '/api-test/db-check', test.dbCheck );
-
 	// ROUTE - EMPLOYEE HRIS
-	app.post( '/sync/global/employee-hris/create-or-update', employeeHRIS.createOrUpdate );
-	app.post( '/sync/list', syncList.create );
+	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
 
 
 }
