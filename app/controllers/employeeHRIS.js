@@ -56,7 +56,6 @@ exports.createOrUpdate = ( req, res ) => {
 		}
 		// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 		else {
-
 			if ( data.NAMA_LENGKAP != req.body.NAMA_LENGKAP ) {
 				
 				employeeHRISModel.findOneAndUpdate( { 
