@@ -38,6 +38,11 @@ exports.createOrUpdate = ( req, res ) => {
 				FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
 			} );
 
+
+
+
+
+
 			empHRIS.save()
 			.then( data => {
 				console.log(data);
