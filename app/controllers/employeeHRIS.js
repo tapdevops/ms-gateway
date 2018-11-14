@@ -37,12 +37,7 @@ exports.createOrUpdate = ( req, res ) => {
 				DELETE_USER: ( req.body.DELETE_USER != '' ) ? Date( req.body.DELETE_USER ) : "",
 				FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
 			} );
-
-
-
-
-
-
+			
 			empHRIS.save()
 			.then( data => {
 				console.log(data);
