@@ -66,6 +66,7 @@ app.post( '/api/login', ( req, res ) => {
 				const loginData = {};
 
 				const employeeHRIS = require( './app/models/employeeHRIS.js' );
+				const userAuth = require( './app/models/userAuth.js' );
 				const pjs = require( './app/models/pjs.js' );
 
 				employeeHRIS.findOne( { 
@@ -79,7 +80,14 @@ app.post( '/api/login', ( req, res ) => {
 						pjs.findOne( { 
 							USERNAME: req.body.username
 						} ).then( data => {
-							setLogin( '1234565', req.body.username, '123', '123' );
+							if ( !data ) {
+								return res.status( 404 ).send({
+									status: false,
+									message: "User tersebut belum terdaftar",
+									data: {}
+								});
+							}
+
 							// Kondisi data ada di PJS
 							res.json({
 								status: true,
@@ -112,14 +120,51 @@ app.post( '/api/login', ( req, res ) => {
 
 					// LOGIN via Employee HRIS
 					else {
-						res.json({
-							status: true,
-							message: "Success HRIS",
-							data: {
-								ACCESS_TOKEN: token,
-								USERDATA: data
-							}
-						})
+						var data_hris = data;
+						console.log(data_hris.EMPLOYEE_NIK);
+						userAuth.findOne( { 
+							EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK
+							} ).then( data_auth => {
+								if ( !data_auth ) {
+									return res.status( 404 ).send({
+										status: false,
+										message: "User tersebut belum terdaftar (AUTH1)",
+										data: {}
+									});
+								}
+
+								// Kondisi data ada di PJS
+								res.json({
+									status: true,
+									message: "Success",
+									userdata: {
+										USERNAME: data_hris.EMPLOYEE_USERNAME,
+										NIK: data_hris.EMPLOYEE_NIK,
+										ACCESS_TOKEN: token,
+										JOB_CODE: data_hris.EMPLOYEE_POSITION,
+										USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+										USER_ROLE: data_auth.USER_ROLE,
+										REFERENCE_ROLE: data_auth.REFERENCE_ROLE,
+										LOCATION_CODE: data_auth.LOCATION_CODE
+									}
+									
+								})
+							} ).catch( err => {
+								if( err.kind === 'ObjectId' ) {
+									return res.status( 404 ).send({
+										status: false,
+										message: "Error retrieving user 4zzz",
+										data: {}
+									});
+								}
+								return res.status( 500 ).send({
+									status: false,
+									message: "Error retrieving user 3zzz",
+									data: {}
+								} );
+							} );
+
+						
 					}
 
 				} ).catch( err => {
@@ -142,7 +187,7 @@ app.post( '/api/login', ( req, res ) => {
 			else {
 				res.status( 403 ).send( {
 					status: false,
-					message: 'Invalid credentials',
+					message: 'Username/Password anda salah.',
 					data: {}
 				} );
 			}
@@ -152,7 +197,7 @@ app.post( '/api/login', ( req, res ) => {
 	else {
 		res.status( 400 ).send( {
 			status: false,
-			message: 'Authentication failed! Please check the request',
+			message: 'Periksa inputan anda',
 			data: {}
 		} );
 	}
@@ -178,6 +223,7 @@ function setLogin( employee_nik, username, access_token, imei ) {
 		}
 		return data.USERNAME;
 		console.log(data.USERNAME);
+
 		/*
 		// Kondisi belum ada data, create baru dan insert ke Sync List
 		if( !data ) {
