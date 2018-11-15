@@ -79,12 +79,19 @@ app.post( '/api/login', ( req, res ) => {
 						pjs.findOne( { 
 							USERNAME: req.body.username
 						} ).then( data => {
+							setLogin( '1234565', req.body.username, '123', '123' );
 							// Kondisi data ada di PJS
 							res.json({
 								status: true,
 								message: "Success PJS",
 								data: {
-									ACCESS_TOKEN: token
+									ACCESS_TOKEN: token,
+									USERDATA: {
+										EMPLOYEE_NIK: data.EMPLOYEE_NIK,
+										USERNAME: data.USERNAME,
+										NAMA_LENGKAP: data.NAMA_LENGKAP,
+										JOB_CODE: data.JOB_CODE
+									}
 								}
 							})
 						} ).catch( err => {
@@ -109,7 +116,8 @@ app.post( '/api/login', ( req, res ) => {
 							status: true,
 							message: "Success HRIS",
 							data: {
-								ACCESS_TOKEN: token
+								ACCESS_TOKEN: token,
+								USERDATA: data
 							}
 						})
 					}
@@ -128,58 +136,6 @@ app.post( '/api/login', ( req, res ) => {
 						data: {}
 					} );
 				} );
-
-				/*
-				loginModel.findOne( { 
-					USERNAME: req.body.username
-				} ).then( data => {
-					
-					if( !data ) {
-						return res.status( 404 ).send({
-							status: false,
-							message: "Data anda belum terdaftar dalam database, silahkan hubungi Administrator",
-							data: {}
-						});
-					}
-
-					logdata = {
-						"USERNAME": data.USERNAME,
-						"USER_AUTH_CODE": data.USER_AUTH_CODE,
-						"EMPLOYEE_NIK": data.EMPLOYEE_NIK
-					}
-
-					let token = jwt.sign( { username: req.body.username }, config.secret_key, { expiresIn: '24h' } );
-
-					console.log(logdata);
-
-					res.send( {
-						status: true,
-						message: data.message,
-						data: {
-							token: token,
-							login: logdata
-						}
-					} );
-
-					console.log( '3' );
-
-				} ).catch( err => {
-					if( err.kind === 'ObjectId' ) {
-						return res.status( 404 ).send({
-							status: false,
-							message: "Error retrieving user 2",
-							data: {}
-						});
-						console.log( '2' );
-					}
-					console.log( '1' );
-					return res.status( 500 ).send({
-						status: false,
-						message: "Error retrieving user",
-						data: {}
-					} );
-				} );
-				*/
 				
 			}
 			// 2.2. Kondisi false, data tidak ada di LDAP
@@ -202,11 +158,6 @@ app.post( '/api/login', ( req, res ) => {
 	}
 } );
 
-// Set Login
-function setLogin( access_token, imei ) {
-	
-}
-
 app.get( '/', ( req, res ) => {
 	res.json( { 'message': config.app_name } )
 } );
@@ -214,3 +165,120 @@ app.get( '/', ( req, res ) => {
 // Routes
 require( './routes/route.js' )( app );
 
+// Set Login
+// Create or update data
+function setLogin( employee_nik, username, access_token, imei ) {
+
+	const loginModel = require( './app/models/login.js' );
+	loginModel.findOne( { 
+		USERNAME: 'ferdinand' 
+	} ).then( data => {
+		if( !data ) {
+			return 'Failed';
+		}
+		return data.USERNAME;
+		console.log(data.USERNAME);
+		/*
+		// Kondisi belum ada data, create baru dan insert ke Sync List
+		if( !data ) {
+
+			const block = new loginModel( {
+				REGION_CODE: req.body.REGION_CODE || "",
+				COMP_CODE: req.body.COMP_CODE || "",
+				EST_CODE: req.body.EST_CODE || "",
+				WERKS: req.body.WERKS || "",
+				AFD_CODE: req.body.AFD_CODE || "",
+				BLOCK_CODE: req.body.BLOCK_CODE || "",
+				BLOCK_NAME: req.body.BLOCK_NAME || "",
+				WERKS_AFD_BLOCK_CODE: req.body.WERKS_AFD_BLOCK_CODE || "",
+				LATITUDE_BLOCK: req.body.LATITUDE_BLOCK || "",
+				LONGITUDE_BLOCK: req.body.LONGITUDE_BLOCK || "",
+				START_VALID: ( req.body.START_VALID != '' ) ? date.parse( req.body.START_VALID, 'YYYY-MM-DD HH:mm:ss' ) : "",
+				END_VALID: ( req.body.END_VALID != '' ) ? date.parse( req.body.END_VALID, 'YYYY-MM-DD HH:mm:ss' ) : "",
+				INSERT_USER: req.body.INSERT_USER || "",
+				INSERT_TIME: ( req.body.INSERT_TIME != '' ) ? date.parse( req.body.INSERT_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
+				UPDATE_USER: req.body.UPDATE_USER || "",
+				UPDATE_TIME: ( req.body.UPDATE_TIME != '' ) ? date.parse( req.body.UPDATE_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
+				FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
+			} );
+
+			block.save()
+			.then( data => {
+				console.log(data);
+				res.send({
+					status: true,
+					message: 'Success 2',
+					data: {}
+				});
+			} ).catch( err => {
+				res.status( 500 ).send( {
+					status: false,
+					message: 'Some error occurred while creating data',
+					data: {}
+				} );
+			} );
+		}
+		// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
+		else {
+			
+			if ( data.BLOCK_NAME != req.body.BLOCK_NAME || data.AFD_NAME != req.body.AFD_NAME ) {
+				blockModel.findOneAndUpdate( { 
+					WERKS_AFD_BLOCK_CODE: req.body.WERKS_AFD_BLOCK_CODE
+				}, {
+					BLOCK_NAME: req.body.BLOCK_NAME || "",
+					LATITUDE_BLOCK: req.body.LATITUDE_BLOCK || "",
+					LONGITUDE_BLOCK: req.body.LONGITUDE_BLOCK || "",
+					START_VALID: ( req.body.START_VALID != '' ) ? date.parse( req.body.START_VALID, 'YYYY-MM-DD' ) : "",
+					END_VALID: ( req.body.END_VALID != '' ) ? date.parse( req.body.END_VALID, 'YYYY-MM-DD' ) : "",
+					INSERT_USER: req.body.INSERT_USER || "",
+					INSERT_TIME: ( req.body.INSERT_TIME != '' ) ? date.parse( req.body.INSERT_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
+					UPDATE_USER: req.body.UPDATE_USER || "",
+					UPDATE_TIME: ( req.body.UPDATE_TIME != '' ) ? date.parse( req.body.UPDATE_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
+					FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
+				}, { new: true } )
+				.then( data => {
+					if( !data ) {
+						return res.status( 404 ).send( {
+							status: false,
+							message: "Data error updating 2 " + req.body.WERKS_AFD_BLOCK_CODEs,
+							data: {}
+						} );
+					}
+					else {
+						res.send({
+							status: true,
+							message: 'Success',
+							data: {}
+						});
+					}
+				}).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.status( 404 ).send( {
+							status: false,
+							message: "Data not found 2",
+							data: {}
+						} );
+					}
+					return res.status( 500 ).send( {
+						status: false,
+						message: "Data error updating",
+						data: {}
+					} );
+				});
+			}
+			else {
+				res.send( {
+					status: true,
+					message: 'Skip Update',
+					data: {}
+				} );
+			}
+		}*/
+		
+	} ).catch( err => {
+		if( err.kind === 'ObjectId' ) {
+			console.log( 'Data not found 1' );
+		}
+		console.log( 'Error retrieving Datazz' );
+	} );
+}
