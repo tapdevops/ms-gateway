@@ -60,4 +60,15 @@ module.exports = ( app ) => {
 	// ROUTE - Login Log
 	app.post( '/api/login-log', verifyToken, loginLog.create );
 
+
+
+
+
+
+	const test = require( '../app/controllers/test.js' );
+	app.get( '/test', test.test );
+
+
+
+
 }

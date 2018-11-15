@@ -65,6 +65,71 @@ app.post( '/api/login', ( req, res ) => {
 				const loginModel = require( './app/models/login.js' );
 				const loginData = {};
 
+				const employeeHRIS = require( './app/models/employeeHRIS.js' );
+				const pjs = require( './app/models/pjs.js' );
+
+				employeeHRIS.findOne( { 
+					EMPLOYEE_USERNAME: req.body.username
+				} ).then( data => {
+
+					var imei_bayangan = '12345-00000-22232-22121';
+					let token = jwt.sign( { username: req.body.username }, config.secret_key, { expiresIn: '24h' } );
+					// LOGIN via PJS
+					if( !data ) {
+						pjs.findOne( { 
+							USERNAME: req.body.username
+						} ).then( data => {
+							// Kondisi data ada di PJS
+							res.json({
+								status: true,
+								message: "Success PJS",
+								data: {
+									ACCESS_TOKEN: token
+								}
+							})
+						} ).catch( err => {
+							if( err.kind === 'ObjectId' ) {
+								return res.status( 404 ).send({
+									status: false,
+									message: "Error retrieving user 4",
+									data: {}
+								});
+							}
+							return res.status( 500 ).send({
+								status: false,
+								message: "Error retrieving user 3",
+								data: {}
+							} );
+						} );
+					}
+
+					// LOGIN via Employee HRIS
+					else {
+						res.json({
+							status: true,
+							message: "Success HRIS",
+							data: {
+								ACCESS_TOKEN: token
+							}
+						})
+					}
+
+				} ).catch( err => {
+					if( err.kind === 'ObjectId' ) {
+						return res.status( 404 ).send({
+							status: false,
+							message: "Error retrieving user 2",
+							data: {}
+						});
+					}
+					return res.status( 500 ).send({
+						status: false,
+						message: "Error retrieving user 1",
+						data: {}
+					} );
+				} );
+
+				/*
 				loginModel.findOne( { 
 					USERNAME: req.body.username
 				} ).then( data => {
@@ -76,7 +141,6 @@ app.post( '/api/login', ( req, res ) => {
 							data: {}
 						});
 					}
-					
 
 					logdata = {
 						"USERNAME": data.USERNAME,
@@ -115,6 +179,7 @@ app.post( '/api/login', ( req, res ) => {
 						data: {}
 					} );
 				} );
+				*/
 				
 			}
 			// 2.2. Kondisi false, data tidak ada di LDAP
@@ -137,9 +202,15 @@ app.post( '/api/login', ( req, res ) => {
 	}
 } );
 
+// Set Login
+function setLogin( access_token, imei ) {
+	
+}
+
 app.get( '/', ( req, res ) => {
 	res.json( { 'message': config.app_name } )
 } );
 
 // Routes
 require( './routes/route.js' )( app );
+
