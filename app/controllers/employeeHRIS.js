@@ -7,8 +7,7 @@ const dateAndTimes = require( 'date-and-time' );
 
 // Create or update data
 exports.createOrUpdate = ( req, res ) => {
-
-
+	
 	if( !req.body.EMPLOYEE_NIK ) {
 		return res.status( 400 ).send({
 			status: false,
@@ -25,16 +24,40 @@ exports.createOrUpdate = ( req, res ) => {
 		if( !data ) {
 
 			const empHRIS = new employeeHRISModel( {
-				EMPLOYEE_NIK: req.body.EMPLOYEE_NIK || "",
-				USERNAME: req.body.USERNAME || "",
-				NAMA_LENGKAP: req.body.NAMA_LENGKAP || "",
-				JOB_CODE: req.body.JOB_CODE || "",
-				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: ( req.body.INSERT_TIME != '' ) ? Date( req.body.INSERT_TIME ) : "",
-				UPDATE_USER: req.body.UPDATE_USER || "",
-				UPDATE_TIME: ( req.body.UPDATE_TIME != '' ) ? Date( req.body.UPDATE_TIME ) : "",
-				DELETE_USER: req.body.DELETE_USER || "",
-				DELETE_USER: ( req.body.DELETE_USER != '' ) ? Date( req.body.DELETE_USER ) : "",
+				EMPLOYEE_NIK: req.body.EMPLOYEE_NIK,
+				EMPLOYEE_USERNAME: req.body.EMPLOYEE_USERNAME,
+				EMPLOYEE_FULLNAME: req.body.EMPLOYEE_FULLNAME,
+				EMPLOYEE_GENDER: req.body.EMPLOYEE_GENDER,
+				EMPLOYEE_RELIGION: req.body.EMPLOYEE_RELIGION,
+				EMPLOYEE_BIRTHDAY: req.body.EMPLOYEE_BIRTHDAY,
+				EMPLOYEE_BANKCODE: req.body.EMPLOYEE_BANKCODE,
+				EMPLOYEE_BANKNAME: req.body.EMPLOYEE_BANKNAME,
+				EMPLOYEE_BANKACCOUNT: req.body.EMPLOYEE_BANKACCOUNT,
+				EMPLOYEE_ACCBANKNAME: req.body.EMPLOYEE_ACCBANKNAME,
+				EMPLOYEE_POSITIONCODE: req.body.EMPLOYEE_POSITIONCODE,
+				EMPLOYEE_POSITION: req.body.EMPLOYEE_POSITION,
+				EMPLOYEE_GRADECODE: req.body.EMPLOYEE_GRADECODE,
+				EMPLOYEE_GRADE: req.body.EMPLOYEE_GRADE,
+				EMPLOYEE_LEVEL: req.body.EMPLOYEE_LEVEL,
+				EMPLOYEE_DEPTCODE: req.body.EMPLOYEE_DEPTCODE,
+				EMPLOYEE_DEPARTMENT: req.body.EMPLOYEE_DEPARTMENT,
+				EMPLOYEE_DIVCODE: req.body.EMPLOYEE_DIVCODE,
+				EMPLOYEE_DIVISION: req.body.EMPLOYEE_DIVISION,
+				EMPLOYEE_COMPANYCODE: req.body.EMPLOYEE_COMPANYCODE,
+				EMPLOYEE_LOCATIONCODE: req.body.EMPLOYEE_LOCATIONCODE,
+				LOCATION: req.body.LOCATION,
+				EMPLOYEE_EMAIL: req.body.EMPLOYEE_EMAIL,
+				EMPLOYEE_SPVNIK: req.body.EMPLOYEE_SPVNIK,
+				EMPLOYEE_SPV: req.body.EMPLOYEE_SPV,
+				EMPLOYEE_JOINDATE: req.body.EMPLOYEE_JOINDATE,
+				EMPLOYEE_RESIGNDATE: req.body.EMPLOYEE_RESIGNDATE,
+				INSERT_TIME_DW: req.body.INSERT_TIME_DW,
+				UPDATE_TIME_DW: req.body.UPDATE_TIME_DW,
+				DELETE_TIME_DW: req.body.DELETE_TIME_DW,
+				EMPLOYEE_POSITIONCODE_HCIS: req.body.EMPLOYEE_POSITIONCODE_HCIS,
+				EMPLOYEE_DEPTCODE_HCIS: req.body.EMPLOYEE_DEPTCODE_HCIS,
+				EMPLOYEE_DIVCODE_HCIS: req.body.EMPLOYEE_DIVCODE_HCIS,
+				EMPLOYEE_LOCATIONCODE_HCIS: req.body.EMPLOYEE_LOCATIONCODE_HCIS,
 				FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
 			} );
 			
@@ -56,13 +79,44 @@ exports.createOrUpdate = ( req, res ) => {
 		}
 		// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 		else {
-			if ( data.NAMA_LENGKAP != req.body.NAMA_LENGKAP ) {
+			if ( data.EMPLOYEE_FULLNAME != req.body.EMPLOYEE_FULLNAME ) {
 				
 				employeeHRISModel.findOneAndUpdate( { 
 					EMPLOYEE_NIK: req.body.EMPLOYEE_NIK
 				}, {
-					NAMA_LENGKAP: req.body.NAMA_LENGKAP || "",
-					JOB_CODE: req.body.JOB_CODE || "",
+					EMPLOYEE_USERNAME: req.body.EMPLOYEE_USERNAME,
+					EMPLOYEE_FULLNAME: req.body.EMPLOYEE_FULLNAME,
+					EMPLOYEE_GENDER: req.body.EMPLOYEE_GENDER,
+					EMPLOYEE_RELIGION: req.body.EMPLOYEE_RELIGION,
+					EMPLOYEE_BIRTHDAY: req.body.EMPLOYEE_BIRTHDAY,
+					EMPLOYEE_BANKCODE: req.body.EMPLOYEE_BANKCODE,
+					EMPLOYEE_BANKNAME: req.body.EMPLOYEE_BANKNAME,
+					EMPLOYEE_BANKACCOUNT: req.body.EMPLOYEE_BANKACCOUNT,
+					EMPLOYEE_ACCBANKNAME: req.body.EMPLOYEE_ACCBANKNAME,
+					EMPLOYEE_POSITIONCODE: req.body.EMPLOYEE_POSITIONCODE,
+					EMPLOYEE_POSITION: req.body.EMPLOYEE_POSITION,
+					EMPLOYEE_GRADECODE: req.body.EMPLOYEE_GRADECODE,
+					EMPLOYEE_GRADE: req.body.EMPLOYEE_GRADE,
+					EMPLOYEE_LEVEL: req.body.EMPLOYEE_LEVEL,
+					EMPLOYEE_DEPTCODE: req.body.EMPLOYEE_DEPTCODE,
+					EMPLOYEE_DEPARTMENT: req.body.EMPLOYEE_DEPARTMENT,
+					EMPLOYEE_DIVCODE: req.body.EMPLOYEE_DIVCODE,
+					EMPLOYEE_DIVISION: req.body.EMPLOYEE_DIVISION,
+					EMPLOYEE_COMPANYCODE: req.body.EMPLOYEE_COMPANYCODE,
+					EMPLOYEE_LOCATIONCODE: req.body.EMPLOYEE_LOCATIONCODE,
+					LOCATION: req.body.LOCATION,
+					EMPLOYEE_EMAIL: req.body.EMPLOYEE_EMAIL,
+					EMPLOYEE_SPVNIK: req.body.EMPLOYEE_SPVNIK,
+					EMPLOYEE_SPV: req.body.EMPLOYEE_SPV,
+					EMPLOYEE_JOINDATE: req.body.EMPLOYEE_JOINDATE,
+					EMPLOYEE_RESIGNDATE: req.body.EMPLOYEE_RESIGNDATE,
+					INSERT_TIME_DW: req.body.INSERT_TIME_DW,
+					UPDATE_TIME_DW: req.body.UPDATE_TIME_DW,
+					DELETE_TIME_DW: req.body.DELETE_TIME_DW,
+					EMPLOYEE_POSITIONCODE_HCIS: req.body.EMPLOYEE_POSITIONCODE_HCIS,
+					EMPLOYEE_DEPTCODE_HCIS: req.body.EMPLOYEE_DEPTCODE_HCIS,
+					EMPLOYEE_DIVCODE_HCIS: req.body.EMPLOYEE_DIVCODE_HCIS,
+					EMPLOYEE_LOCATIONCODE_HCIS: req.body.EMPLOYEE_LOCATIONCODE_HCIS,
 					FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
 				}, { new: true } )
 				.then( data => {
@@ -124,5 +178,4 @@ exports.createOrUpdate = ( req, res ) => {
 			data: {}
 		} );
 	} );
-
 };

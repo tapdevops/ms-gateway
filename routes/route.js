@@ -14,7 +14,7 @@ function verifyToken( req, res, next ) {
 		res.sendStatus( 403 );
 	}
 }
-// ABCDZ
+
 module.exports = ( app ) => {
 
 	// Declare Controllers
@@ -47,6 +47,5 @@ module.exports = ( app ) => {
 
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
-
 
 }
