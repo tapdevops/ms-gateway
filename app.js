@@ -75,7 +75,6 @@ app.post( '/api/login', ( req, res ) => {
 					EMPLOYEE_USERNAME: req.body.username
 				} ).then( data => {
 
-					var imei_bayangan = '12345-00000-22232-22121';
 					let token = jwt.sign( { username: req.body.username }, config.secret_key, { expiresIn: '24h' } );
 					// LOGIN via PJS
 					if( !data ) {
@@ -111,7 +110,7 @@ app.post( '/api/login', ( req, res ) => {
 									USERNAME: data_pjs.USERNAME,
 									ACCESS_TOKEN: token,
 									LOG_LOGIN: '',
-									IMEI: imei_bayangan,
+									IMEI: req.body.imei,
 									INSERT_USER: '',
 									INSERT_TIME: '',
 									UPDATE_USER: data_pjs.USERNAME,
@@ -184,6 +183,23 @@ app.post( '/api/login', ( req, res ) => {
 									data: {}
 								});
 							}
+
+							var login_request = {
+								USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+								EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK,
+								USERNAME: data_hris.EMPLOYEE_USERNAME,
+								ACCESS_TOKEN: token,
+								LOG_LOGIN: '',
+								IMEI: req.body.imei,
+								INSERT_USER: '',
+								INSERT_TIME: '',
+								UPDATE_USER: data_hris.EMPLOYEE_USERNAME,
+								DELETE_USER: '',
+								DELETE_TIME: ''
+							};
+							console.log( login_request );
+
+							loginLib.setLogin( login_request );
 
 							// Kondisi data ada di HRIS
 							res.json({
