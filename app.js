@@ -144,7 +144,7 @@ app.post( '/api/login', ( req, res ) => {
 										JOB_CODE: data_hris.EMPLOYEE_POSITION,
 										USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
 										USER_ROLE: data_auth.USER_ROLE,
-										REFERENCE_ROLE: data_auth.REFERENCE_ROLE,
+										REFFERENCE_ROLE: data_auth.REFFERENCE_ROLE,
 										LOCATION_CODE: data_auth.LOCATION_CODE
 									}
 									
