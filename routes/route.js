@@ -22,6 +22,9 @@ module.exports = ( app ) => {
 	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
 	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
 	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
+	const pjs = require( '../app/controllers/pjs.js' );
+	const pjsLog = require( '../app/controllers/pjsLog.js' );
+	const loginLog = require( '../app/controllers/loginLog.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -47,5 +50,14 @@ module.exports = ( app ) => {
 
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
+
+	// ROUTE - PJS
+	app.post( '/api/pjs/', verifyToken, pjs.create );
+
+	// ROUTE - PJS Log
+	app.post( '/api/pjs-log', verifyToken, pjsLog.create );
+
+	// ROUTE - Login Log
+	app.post( '/api/login-log', verifyToken, loginLog.create );
 
 }

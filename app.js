@@ -57,13 +57,11 @@ app.post( '/api/login', ( req, res ) => {
 			headers: { "Content-Type": "application/json" }
 		};
 		
+		// 1. Check ke LDAP
 		client.post( url, args, function ( data, response ) {
+			// 2.1. Kondisi data terdapat pada LDAP
 			if ( data.status == true ) {
-				console.log(req.body);
 
-				// Check Employee HRIS
-
-				/*
 				const loginModel = require( './app/models/login.js' );
 				const loginData = {};
 
@@ -116,9 +114,9 @@ app.post( '/api/login', ( req, res ) => {
 						data: {}
 					} );
 				} );
-				*/
 				
 			}
+			// 2.2. Kondisi false, data tidak ada di LDAP
 			else {
 				res.status( 403 ).send( {
 					status: false,
