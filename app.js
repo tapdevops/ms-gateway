@@ -17,6 +17,7 @@ let bearerToken = require( 'express-bearer-token' ); 			// Import Express Bearer
 const app = express(); 											// Define App
 const config = require( './config/config.js' ); 				// Config
 const dbConfig = require( './config/database.js' ); 			// Database Config
+let db = mongoose.connection;
 
 // Setup Database
 mongoose.Promise = global.Promise;
@@ -63,6 +64,7 @@ app.post( '/api/login', ( req, res ) => {
 			if ( data.status == true ) {
 
 				const loginModel = require( './app/models/login.js' );
+				const loginLib = require( './app/libraries/login.js' );
 				const loginData = {};
 
 				const employeeHRIS = require( './app/models/employeeHRIS.js' );
@@ -77,31 +79,82 @@ app.post( '/api/login', ( req, res ) => {
 					let token = jwt.sign( { username: req.body.username }, config.secret_key, { expiresIn: '24h' } );
 					// LOGIN via PJS
 					if( !data ) {
+
 						pjs.findOne( { 
 							USERNAME: req.body.username
 						} ).then( data => {
 							if ( !data ) {
 								return res.status( 404 ).send({
 									status: false,
-									message: "User tersebut belum terdaftar",
+									message: "User tersebut belum terdaftar (@PJS)",
 									data: {}
 								});
 							}
 
+							var data_pjs = data;
+
 							// Kondisi data ada di PJS
-							res.json({
-								status: true,
-								message: "Success PJS",
-								data: {
-									ACCESS_TOKEN: token,
-									USERDATA: {
-										EMPLOYEE_NIK: data.EMPLOYEE_NIK,
-										USERNAME: data.USERNAME,
-										NAMA_LENGKAP: data.NAMA_LENGKAP,
-										JOB_CODE: data.JOB_CODE
-									}
+							userAuth.findOne( { 
+								EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
+							} ).then( data_auth => {
+								if ( !data_auth ) {
+									return res.status( 404 ).send({
+										status: false,
+										message: "User tersebut belum terdaftar (@PJS-2)",
+										data: {}
+									});
 								}
-							})
+
+								var login_request = {
+									USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+									EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
+									USERNAME: data_pjs.USERNAME,
+									ACCESS_TOKEN: token,
+									LOG_LOGIN: '',
+									IMEI: imei_bayangan,
+									INSERT_USER: '',
+									INSERT_TIME: '',
+									UPDATE_USER: data_pjs.USERNAME,
+									DELETE_USER: '',
+									DELETE_TIME: ''
+								};
+								console.log( login_request );
+
+								loginLib.setLogin( login_request );
+
+
+
+								// Kondisi data ada di PJS
+								res.json({
+									status: true,
+									message: "Success",
+									userdata: {
+										USERNAME: data_pjs.USERNAME,
+										NIK: data_pjs.EMPLOYEE_NIK,
+										ACCESS_TOKEN: token,
+										JOB_CODE: data_pjs.JOB_CODE,
+										USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+										REFFERENCE_ROLE: data_auth.REF_ROLE,
+										USER_ROLE: data_auth.USER_ROLE,
+										LOCATION_CODE: data_auth.LOCATION_CODE
+									}
+								});
+
+							} ).catch( err => {
+								if( err.kind === 'ObjectId' ) {
+									return res.status( 404 ).send({
+										status: false,
+										message: "Error retrieving user 4zzz",
+										data: {}
+									});
+								}
+								return res.status( 500 ).send({
+									status: false,
+									message: "Error retrieving user 3zzz",
+									data: {}
+								} );
+							} );
+
 						} ).catch( err => {
 							if( err.kind === 'ObjectId' ) {
 								return res.status( 404 ).send({
@@ -121,50 +174,48 @@ app.post( '/api/login', ( req, res ) => {
 					// LOGIN via Employee HRIS
 					else {
 						var data_hris = data;
-						console.log(data_hris.EMPLOYEE_NIK);
 						userAuth.findOne( { 
 							EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK
-							} ).then( data_auth => {
-								if ( !data_auth ) {
-									return res.status( 404 ).send({
-										status: false,
-										message: "User tersebut belum terdaftar (AUTH1)",
-										data: {}
-									});
-								}
-
-								// Kondisi data ada di PJS
-								res.json({
-									status: true,
-									message: "Success",
-									userdata: {
-										USERNAME: data_hris.EMPLOYEE_USERNAME,
-										NIK: data_hris.EMPLOYEE_NIK,
-										ACCESS_TOKEN: token,
-										JOB_CODE: data_hris.EMPLOYEE_POSITION,
-										USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
-										USER_ROLE: data_auth.USER_ROLE,
-										REFFERENCE_ROLE: data_auth.REFFERENCE_ROLE,
-										LOCATION_CODE: data_auth.LOCATION_CODE
-									}
-									
-								})
-							} ).catch( err => {
-								if( err.kind === 'ObjectId' ) {
-									return res.status( 404 ).send({
-										status: false,
-										message: "Error retrieving user 4zzz",
-										data: {}
-									});
-								}
-								return res.status( 500 ).send({
+						} ).then( data_auth => {
+							if ( !data_auth ) {
+								return res.status( 404 ).send({
 									status: false,
-									message: "Error retrieving user 3zzz",
+									message: "User tersebut belum terdaftar (@HRIS)",
 									data: {}
-								} );
-							} );
+								});
+							}
 
-						
+							// Kondisi data ada di HRIS
+							res.json({
+								status: true,
+								message: "Success",
+								userdata: {
+									USERNAME: data_hris.EMPLOYEE_USERNAME,
+									NIK: data_hris.EMPLOYEE_NIK,
+									ACCESS_TOKEN: token,
+									JOB_CODE: data_hris.EMPLOYEE_POSITION,
+									USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+									REFFERENCE_ROLE: data_auth.REF_ROLE,
+									USER_ROLE: data_auth.USER_ROLE,
+									LOCATION_CODE: data_auth.LOCATION_CODE
+								}
+							});
+
+						} ).catch( err => {
+							if( err.kind === 'ObjectId' ) {
+								return res.status( 404 ).send({
+									status: false,
+									message: "Error retrieving user 4zzz",
+									data: {}
+								});
+							}
+							return res.status( 500 ).send({
+								status: false,
+								message: "Error retrieving user 3zzz",
+								data: {}
+							} );
+						} );
+
 					}
 
 				} ).catch( err => {
@@ -210,121 +261,3 @@ app.get( '/', ( req, res ) => {
 // Routes
 require( './routes/route.js' )( app );
 
-// Set Login
-// Create or update data
-function setLogin( employee_nik, username, access_token, imei ) {
-
-	const loginModel = require( './app/models/login.js' );
-	loginModel.findOne( { 
-		USERNAME: 'ferdinand' 
-	} ).then( data => {
-		if( !data ) {
-			return 'Failed';
-		}
-		return data.USERNAME;
-		console.log(data.USERNAME);
-
-		/*
-		// Kondisi belum ada data, create baru dan insert ke Sync List
-		if( !data ) {
-
-			const block = new loginModel( {
-				REGION_CODE: req.body.REGION_CODE || "",
-				COMP_CODE: req.body.COMP_CODE || "",
-				EST_CODE: req.body.EST_CODE || "",
-				WERKS: req.body.WERKS || "",
-				AFD_CODE: req.body.AFD_CODE || "",
-				BLOCK_CODE: req.body.BLOCK_CODE || "",
-				BLOCK_NAME: req.body.BLOCK_NAME || "",
-				WERKS_AFD_BLOCK_CODE: req.body.WERKS_AFD_BLOCK_CODE || "",
-				LATITUDE_BLOCK: req.body.LATITUDE_BLOCK || "",
-				LONGITUDE_BLOCK: req.body.LONGITUDE_BLOCK || "",
-				START_VALID: ( req.body.START_VALID != '' ) ? date.parse( req.body.START_VALID, 'YYYY-MM-DD HH:mm:ss' ) : "",
-				END_VALID: ( req.body.END_VALID != '' ) ? date.parse( req.body.END_VALID, 'YYYY-MM-DD HH:mm:ss' ) : "",
-				INSERT_USER: req.body.INSERT_USER || "",
-				INSERT_TIME: ( req.body.INSERT_TIME != '' ) ? date.parse( req.body.INSERT_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
-				UPDATE_USER: req.body.UPDATE_USER || "",
-				UPDATE_TIME: ( req.body.UPDATE_TIME != '' ) ? date.parse( req.body.UPDATE_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
-				FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
-			} );
-
-			block.save()
-			.then( data => {
-				console.log(data);
-				res.send({
-					status: true,
-					message: 'Success 2',
-					data: {}
-				});
-			} ).catch( err => {
-				res.status( 500 ).send( {
-					status: false,
-					message: 'Some error occurred while creating data',
-					data: {}
-				} );
-			} );
-		}
-		// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
-		else {
-			
-			if ( data.BLOCK_NAME != req.body.BLOCK_NAME || data.AFD_NAME != req.body.AFD_NAME ) {
-				blockModel.findOneAndUpdate( { 
-					WERKS_AFD_BLOCK_CODE: req.body.WERKS_AFD_BLOCK_CODE
-				}, {
-					BLOCK_NAME: req.body.BLOCK_NAME || "",
-					LATITUDE_BLOCK: req.body.LATITUDE_BLOCK || "",
-					LONGITUDE_BLOCK: req.body.LONGITUDE_BLOCK || "",
-					START_VALID: ( req.body.START_VALID != '' ) ? date.parse( req.body.START_VALID, 'YYYY-MM-DD' ) : "",
-					END_VALID: ( req.body.END_VALID != '' ) ? date.parse( req.body.END_VALID, 'YYYY-MM-DD' ) : "",
-					INSERT_USER: req.body.INSERT_USER || "",
-					INSERT_TIME: ( req.body.INSERT_TIME != '' ) ? date.parse( req.body.INSERT_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
-					UPDATE_USER: req.body.UPDATE_USER || "",
-					UPDATE_TIME: ( req.body.UPDATE_TIME != '' ) ? date.parse( req.body.UPDATE_TIME, 'YYYY-MM-DD HH:mm:ss' ) : "",
-					FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' )
-				}, { new: true } )
-				.then( data => {
-					if( !data ) {
-						return res.status( 404 ).send( {
-							status: false,
-							message: "Data error updating 2 " + req.body.WERKS_AFD_BLOCK_CODEs,
-							data: {}
-						} );
-					}
-					else {
-						res.send({
-							status: true,
-							message: 'Success',
-							data: {}
-						});
-					}
-				}).catch( err => {
-					if( err.kind === 'ObjectId' ) {
-						return res.status( 404 ).send( {
-							status: false,
-							message: "Data not found 2",
-							data: {}
-						} );
-					}
-					return res.status( 500 ).send( {
-						status: false,
-						message: "Data error updating",
-						data: {}
-					} );
-				});
-			}
-			else {
-				res.send( {
-					status: true,
-					message: 'Skip Update',
-					data: {}
-				} );
-			}
-		}*/
-		
-	} ).catch( err => {
-		if( err.kind === 'ObjectId' ) {
-			console.log( 'Data not found 1' );
-		}
-		console.log( 'Error retrieving Datazz' );
-	} );
-}

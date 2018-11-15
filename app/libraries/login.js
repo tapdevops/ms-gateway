@@ -1,24 +1,114 @@
-const employeeHRISModel = require( '../models/employeeHRIS.js' );
+const loginModel = require( '../models/login.js' );
+const loginLogModel = require( '../models/loginLog.js' );
 
-module.exports.checkHRIS = function ( username ) {
+module.exports.setLogin = function ( request ) {
+	const set = new loginModel( {
+		USER_AUTH_CODE: request.USER_AUTH_CODE || "",
+		EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
+		USERNAME: request.USERNAME || "",
+		ACCESS_TOKEN: request.ACCESS_TOKEN || "",
+		LAST_LOGIN: new Date(),
+		LOG_LOGIN: request.LOG_LOGIN || "",
+		IMEI: request.IMEI || "",
+		INSERT_USER: request.INSERT_USER || "",
+		INSERT_TIME: request.INSERT_TIME || "",
+		UPDATE_USER: request.USERNAME || "",
+		UPDATE_TIME: new Date(),
+		DELETE_USER: request.DELETE_USER || "",
+		DELETE_TIME: request.DELETE_TIME || ""
+	} );
 
+	loginModel.findOne( { 
+		EMPLOYEE_NIK: request.EMPLOYEE_NIK,
+		USERNAME: request.USERNAME
+	} ).then( data => {
 
-	reslt = employeeHRISModel.findOne({ EMPLOYEE_USERNAME: 'nicholas.budihardja' }) .exec(function (err, user){    
-		// User result only available inside of this function!
-		//console.log(user) // => yields your user results
-	})
+		// Create Data Baru
+		if ( !data ) {
+			set.save()
+			.then( data => {
+				if ( !data ) {
+					console.log( 'Set Login Error 2' );
+				}
+				const loginLog = new loginLogModel({
+					USER_AUTH_CODE: request.USER_AUTH_CODE || "",
+					EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
+					USERNAME: request.USERNAME || "",
+					IMEI: request.IMEI || "",
+					DATE_LOGIN: new Date()
+				});
 
-// User result not available out here!
-console.log(reslt) // => actually set to return of .exec (undefined)
+				loginLog.save()
+				.then( data => {
+					if ( !data ) {
+						console.log( 'Set Login Log Error 2' );
+					}
+					console.log( 'Success' );
+				} ).catch( err => {
+					console.log( 'Set Login Log Error 2' );
+				} );
+			} ).catch( err => {
+				console.log( 'Set Login Error 1' );
+			} );
+		}
 
-	//var query = employeeHRISModel.findOne( { EMPLOYEE_USERNAME: 'nicholas.budihardja' } );
-	//query.select('EMPLOYEE_USERNAME EMPLOYEE_NIK');
-	//query.exec(function ( err, datas ) {
-	//	if ( err ) {
-	//		console.log( 'BS' );
-	//	}
-	//	else {
-	//		console.log( 'AS' );
-	//	}
-	//});
+		// Update data TM_LOGIN yang sudah ada
+		else {
+			loginModel.findOneAndUpdate( { 
+				EMPLOYEE_NIK: request.EMPLOYEE_NIK,
+				USERNAME: request.USERNAME
+			}, {
+				USERNAME: request.USERNAME || "",
+				ACCESS_TOKEN: request.ACCESS_TOKEN || "",
+				LAST_LOGIN: new Date(),
+				LOG_LOGIN: request.LOG_LOGIN || "",
+				IMEI: request.IMEI || "",
+				INSERT_USER: request.INSERT_USER || "",
+				INSERT_TIME: request.INSERT_TIME || "",
+				UPDATE_USER: request.USERNAME || "",
+				UPDATE_TIME: new Date(),
+				DELETE_USER: request.DELETE_USER || "",
+				DELETE_TIME: request.DELETE_TIME || ""
+			}, { new: true } )
+			.then( data => {
+				if( !data ) {
+					console.log( 'Set Login Update Error 3' );
+				}
+				else {
+					const loginLog = new loginLogModel({
+						USER_AUTH_CODE: request.USER_AUTH_CODE || "",
+						EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
+						USERNAME: request.USERNAME || "",
+						IMEI: request.IMEI || "",
+						DATE_LOGIN: new Date()
+					});
+
+					loginLog.save()
+					.then( data => {
+						if ( !data ) {
+							console.log( 'Set Login Log Error 2' );
+						}
+						console.log( 'Success' );
+					} ).catch( err => {
+						console.log( 'Set Login Log Error 2' );
+					} );
+					console.log( 'Set Login Update Success' );
+				}
+			}).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					console.log( 'Set Login Update Error 2' );
+				}
+				console.log( 'Set Login Update Error 1' );
+			});
+		}
+
+	} ).catch( err => {
+		if( err.kind === 'ObjectId' ) {
+			console.log( 'Error retrieving Data 2' );
+		}
+		console.log( 'Error retrieving Data 1' );
+	} );
+
+	
+
 };

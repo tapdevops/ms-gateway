@@ -4,7 +4,7 @@ const UserAuthSchema = mongoose.Schema( {
 	USER_AUTH_CODE: String,
 	EMPLOYEE_NIK: String,
 	USER_ROLE: String,
-	REFERENCE_ROLE: String,
+	REF_ROLE: String,
 	LOCATION_CODE: String
 });
 
