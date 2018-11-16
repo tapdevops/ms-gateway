@@ -10,7 +10,7 @@ const config = require( '../../config/config.js' );
 // Create and Save new Data
 exports.create = ( req, res ) => {
 
-	if( !req.body.FLAG_UPDATE ) {
+	if( !req.body.TABLE_NAME ) {
 		return res.status( 400 ).send({
 			status: false,
 			message: 'Invalid input',
@@ -19,7 +19,8 @@ exports.create = ( req, res ) => {
 	}
 
 	const setdata = new syncDBLogModel({
-		FLAG_UPDATE: req.body.FLAG_UPDATE || "",
+		FLAG_UPDATE: dateAndTimes.format( new Date(), 'YYYYMMDD' ),
+		TABLE_NAME: req.body.TABLE_NAME || "",
 		NUMROWS: req.body.NUMROWS || "",
 		START_TIME: req.body.START_TIME || "",
 		END_TIME: req.body.END_TIME || "",

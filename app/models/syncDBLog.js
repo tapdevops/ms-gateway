@@ -2,6 +2,7 @@ const mongoose = require( 'mongoose' );
 
 const SyncDBLogSchema = mongoose.Schema( {
 	FLAG_UPDATE: String,
+	TABLE_NAME: String,
 	NUMROWS: Number,
 	START_TIME: {
 		type: Date,
