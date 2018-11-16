@@ -1,7 +1,37 @@
 const loginModel = require( '../models/login.js' );
 const loginLogModel = require( '../models/loginLog.js' );
 
+module.exports.setLogLogin = function( request ) {
+	loginLogModel.find( { USER_AUTH_CODE : request.USER_AUTH_CODE } ).count()
+	.then( data => {
+		if ( !data ) {
+			console.log( 'Set Log Login Count Error 2' );
+		}
+		else {
+			loginModel.findOneAndUpdate( { 
+				USER_AUTH_CODE: request.USER_AUTH_CODE
+			}, {
+				LOG_LOGIN: data
+			}, { new: true } )
+			.then( data => {
+				if ( !data ) {
+					console.log( 'Set Login Update Error 5' );
+				}
+				console.log( 'Set Login Update Error 4' );
+			}).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					console.log( 'Set Login Update Error 3' );
+				}
+				console.log( 'Set Log Login Count Error 2' );
+			});
+		}
+	} ).catch( err => {
+		console.log( 'Set Log Login Count Error' );
+	} );
+}
+
 module.exports.setLogin = function ( request ) {
+	console.log( 'SET LOG LOGINCC' );
 	const set = new loginModel( {
 		USER_AUTH_CODE: request.USER_AUTH_CODE || "",
 		EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
@@ -10,15 +40,13 @@ module.exports.setLogin = function ( request ) {
 		LAST_LOGIN: new Date(),
 		LOG_LOGIN: request.LOG_LOGIN || "",
 		IMEI: request.IMEI || "",
-		INSERT_USER: request.INSERT_USER || "",
-		INSERT_TIME: request.INSERT_TIME || "",
+		INSERT_USER: request.USERNAME || "",
+		INSERT_TIME: new Date(),
 		UPDATE_USER: request.USERNAME || "",
 		UPDATE_TIME: new Date(),
 		DELETE_USER: request.DELETE_USER || "",
 		DELETE_TIME: request.DELETE_TIME || ""
 	} );
-
-	console.log(set);
 
 	loginModel.findOne( { 
 		EMPLOYEE_NIK: request.EMPLOYEE_NIK,
@@ -32,6 +60,7 @@ module.exports.setLogin = function ( request ) {
 				if ( !data ) {
 					console.log( 'Set Login Error 2' );
 				}
+				
 				const loginLog = new loginLogModel({
 					USER_AUTH_CODE: request.USER_AUTH_CODE || "",
 					EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
@@ -56,6 +85,8 @@ module.exports.setLogin = function ( request ) {
 
 		// Update data TM_LOGIN yang sudah ada
 		else {
+
+
 			loginModel.findOneAndUpdate( { 
 				EMPLOYEE_NIK: request.EMPLOYEE_NIK,
 				USERNAME: request.USERNAME
@@ -65,8 +96,6 @@ module.exports.setLogin = function ( request ) {
 				LAST_LOGIN: new Date(),
 				LOG_LOGIN: request.LOG_LOGIN || "",
 				IMEI: request.IMEI || "",
-				INSERT_USER: request.INSERT_USER || "",
-				INSERT_TIME: request.INSERT_TIME || "",
 				UPDATE_USER: request.USERNAME || "",
 				UPDATE_TIME: new Date(),
 				DELETE_USER: request.DELETE_USER || "",

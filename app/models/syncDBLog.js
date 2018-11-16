@@ -1,7 +1,8 @@
 const mongoose = require( 'mongoose' );
 
-const SyncSchema = mongoose.Schema( {
-	TABLE_NAME: String,
+const SyncDBLogSchema = mongoose.Schema( {
+	FLAG_UPDATE: String,
+	NUMROWS: Number,
 	START_TIME: {
 		type: Date,
 		default: function() {
@@ -16,4 +17,4 @@ const SyncSchema = mongoose.Schema( {
 	}
 });
 
-module.exports = mongoose.model( 'Sync', SyncSchema, 'T_LOG_SYNC' );
+module.exports = mongoose.model( 'SyncDBLog', SyncDBLogSchema, 'T_LOG_SYNC_DB' );

@@ -101,11 +101,13 @@ app.post( '/api/login', ( req, res ) => {
 							}
 
 							var data_pjs = data;
+							console.log( data_pjs );
 
 							// Kondisi data ada di PJS
 							userAuth.findOne( { 
 								EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
 							} ).then( data_auth => {
+								console.log( data_auth );
 								if ( !data_auth ) {
 									return res.status( 404 ).send({
 										status: false,
@@ -129,9 +131,9 @@ app.post( '/api/login', ( req, res ) => {
 								};
 								console.log( login_request );
 
+
 								loginLib.setLogin( login_request );
-
-
+								loginLib.setLogLogin( login_request );
 
 								// Kondisi data ada di PJS
 								res.json({
@@ -207,9 +209,9 @@ app.post( '/api/login', ( req, res ) => {
 								DELETE_USER: '',
 								DELETE_TIME: ''
 							};
-							console.log( login_request );
 
 							loginLib.setLogin( login_request );
+							loginLib.setLogLogin( login_request );
 
 							// Kondisi data ada di HRIS
 							res.json({

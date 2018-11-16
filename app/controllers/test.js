@@ -1,8 +1,11 @@
-var login = require( '../libraries/login' );
+const loginLogModel = require( '../models/loginLog.js' );
 exports.test = ( req, res ) => {
-	console.log(login.checkHRIS( 'ferdinand' ));
-	res.json({
-		message: 'WAW',
-		data: login.checkHRIS( 'ferdinand' )
-	})
+	loginLogModel.find({USER_AUTH_CODE:'TAC00004'}).count()
+	.then( data => {
+		
+	} ).catch( err => {
+		console.log( 'Set Log Login' );
+	} );
+	
+	
 }

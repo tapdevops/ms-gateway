@@ -60,6 +60,9 @@ module.exports = ( app ) => {
 	// ROUTE - Login Log
 	app.post( '/api/login-log', verifyToken, loginLog.create );
 
+	// ROUTE - Sync DB Log
+	app.post( '/api/sync-db-log', verifyToken, loginLog.create );
+
 
 
 
