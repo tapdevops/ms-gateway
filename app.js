@@ -50,6 +50,14 @@ app.post( '/api/login', ( req, res ) => {
 
 	if ( req.body.username && req.body.password ) {
 
+		if( !req.body.imei ) {
+			return res.status( 400 ).send({
+				status: false,
+				message: 'Invalid IMEI',
+				data: {}
+			});
+		}
+
 		var client = new Client();
 		var url = config.url.microservices.ldap;
 		var args = {
@@ -266,7 +274,7 @@ app.post( '/api/login', ( req, res ) => {
 	else {
 		res.status( 400 ).send( {
 			status: false,
-			message: 'Periksa inputan anda',
+			message: 'Periksa input Username/Password anda.',
 			data: {}
 		} );
 	}
