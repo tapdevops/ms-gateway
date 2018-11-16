@@ -7,6 +7,7 @@ const LoginSchema = mongoose.Schema( {
 	ACCESS_TOKEN: String,
 	LAST_LOGIN: String,
 	LOG_LOGIN: String,
+	IMEI: String,
 	INSERT_USER: String,
 	INSERT_TIME: String,
 	UPDATE_USER: String,

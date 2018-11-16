@@ -46,6 +46,8 @@ app.listen( config.app_port, () => {
 // Login
 app.post( '/api/login', ( req, res ) => {
 
+	console.log(req.body.imei);
+
 	if ( req.body.username && req.body.password ) {
 
 		var client = new Client();
@@ -276,4 +278,19 @@ app.get( '/', ( req, res ) => {
 
 // Routes
 require( './routes/route.js' )( app );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

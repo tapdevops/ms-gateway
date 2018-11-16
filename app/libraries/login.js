@@ -18,6 +18,8 @@ module.exports.setLogin = function ( request ) {
 		DELETE_TIME: request.DELETE_TIME || ""
 	} );
 
+	console.log(set);
+
 	loginModel.findOne( { 
 		EMPLOYEE_NIK: request.EMPLOYEE_NIK,
 		USERNAME: request.USERNAME
