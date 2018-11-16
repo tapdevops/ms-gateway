@@ -49,14 +49,14 @@ app.post( '/api/login', ( req, res ) => {
 	console.log(req.body.imei);
 
 	if ( req.body.username && req.body.password ) {
-
+		/*
 		if( !req.body.imei ) {
 			return res.status( 400 ).send({
 				status: false,
 				message: 'Invalid IMEI',
 				data: {}
 			});
-		}
+		}*/
 
 		var client = new Client();
 		var url = config.url.microservices.ldap;
@@ -137,7 +137,7 @@ app.post( '/api/login', ( req, res ) => {
 								res.json({
 									status: true,
 									message: "Success",
-									userdata: {
+									data: {
 										USERNAME: data_pjs.USERNAME,
 										NIK: data_pjs.EMPLOYEE_NIK,
 										ACCESS_TOKEN: token,
@@ -215,7 +215,7 @@ app.post( '/api/login', ( req, res ) => {
 							res.json({
 								status: true,
 								message: "Success",
-								userdata: {
+								data: {
 									USERNAME: data_hris.EMPLOYEE_USERNAME,
 									NIK: data_hris.EMPLOYEE_NIK,
 									ACCESS_TOKEN: token,
