@@ -1,5 +1,5 @@
 /**
- * Microservices Gateway
+ * Microservice Auth
  *
  * @description :: Untuk mengatur microservice lainnya
  * @author      :: Ferdinand
@@ -72,8 +72,6 @@ app.post( '/api/login', ( req, res ) => {
 		client.post( url, args, function ( data, response ) {
 			// 2.1. Kondisi data terdapat pada LDAP
 
-			
-
 			if ( data.status == true ) {
 
 				const loginModel = require( './app/models/login.js' );
@@ -88,7 +86,7 @@ app.post( '/api/login', ( req, res ) => {
 					EMPLOYEE_USERNAME: req.body.username
 				} ).then( data => {
 
-					let token = jwt.sign( { username: req.body.username }, config.secret_key, { expiresIn: '24h' } );
+					
 					// LOGIN via PJS
 					if( !data ) {
 
@@ -119,6 +117,17 @@ app.post( '/api/login', ( req, res ) => {
 									});
 								}
 
+								let token = jwt.sign( 
+									{ 
+										username: req.body.username,
+										user_auth_code: data_auth.USER_AUTH_CODE,
+										_id: data_auth._id 
+									}, 
+									config.secret_key, 
+									{ 
+										expiresIn: '24h' 
+									} 
+								);
 								var login_request = {
 									USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
 									EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
@@ -132,11 +141,11 @@ app.post( '/api/login', ( req, res ) => {
 									DELETE_USER: '',
 									DELETE_TIME: ''
 								};
+
 								console.log( login_request );
 
-
 								loginLib.setLogin( login_request );
-								loginLib.setLogLogin( login_request );
+								//loginLib.setLogLogin( login_request );
 
 								// Kondisi data ada di PJS
 								res.json({
@@ -199,6 +208,18 @@ app.post( '/api/login', ( req, res ) => {
 								});
 							}
 
+							let token = jwt.sign( 
+								{ 
+									username: req.body.username,
+									user_auth_code: data_auth.USER_AUTH_CODE,
+									_id: data_auth._id 
+								}, 
+								config.secret_key, 
+								{ 
+									expiresIn: '24h' 
+								} 
+							);
+
 							var login_request = {
 								USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
 								EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK,
@@ -214,7 +235,7 @@ app.post( '/api/login', ( req, res ) => {
 							};
 
 							loginLib.setLogin( login_request );
-							loginLib.setLogLogin( login_request );
+							//loginLib.setLogLogin( login_request );
 
 							// Kondisi data ada di HRIS
 							res.json({
@@ -257,7 +278,7 @@ app.post( '/api/login', ( req, res ) => {
 							data: {}
 						});
 					}
-					return res.status( 500 ).send({
+					return res.status( 500 ).send( {
 						status: false,
 						message: "Error retrieving user 1",
 						data: {}
@@ -288,21 +309,87 @@ app.get( '/', ( req, res ) => {
 	res.json( { 'message': config.app_name } )
 } );
 
+app.post( '/api/logout', verifyToken, ( req, res) => {
+	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+		if ( err ) {
+			res.send({
+				status: false,
+				message: 'Token expired!',
+				data: {}
+			});
+		}
+		else {
+			if( !req.body.user_auth_code ) {
+				return res.status( 400 ).send({
+					status: false,
+					message: 'Invalid input',
+					data: {}
+				});
+			}
+
+			const loginModel = require( './app/models/login.js' );
+
+			loginModel.findOneAndUpdate( { 
+				USER_AUTH_CODE: req.body.user_auth_code
+			}, {
+				ACCESS_TOKEN: "",
+				UPDATE_TIME: new Date()
+			}, { new: true } )
+			.then( data => {
+				if( !data ) {
+					console.log('A');
+					return res.status( 404 ).send( {
+						status: false,
+						message: "Data error updating 2",
+						data: {}
+					} );
+				}
+				else {
+					console.log('B');
+					res.send({
+						status: true,
+						message: 'Success',
+						data: {}
+					});
+				}
+			}).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					console.log('C');
+					return res.status( 404 ).send( {
+						status: false,
+						message: "Data not found 2",
+						data: {}
+					} );
+				}
+				return res.status( 500 ).send( {
+					status: false,
+					message: "Data error updating",
+					data: {}
+				} );
+			});
+		}
+	} );
+} );
+
 // Routes
 require( './routes/route.js' )( app );
 
+function verifyToken( req, res, next ) {
+	// Get auth header value
+	const bearerHeader = req.headers['authorization'];
 
+	if ( typeof bearerHeader !== 'undefined' ) {
+		const bearer = bearerHeader.split( ' ' );
+		const bearerToken = bearer[1];
 
-
-
-
-
-
-
-
-
-
-
+		req.token = bearerToken;
+		next();
+	}
+	else {
+		// Forbidden
+		res.sendStatus( 403 );
+	}
+}
 
 
 

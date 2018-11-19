@@ -12,7 +12,11 @@ exports.create = ( req, res ) => {
 
 	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
-			res.sendStatus( 403 );
+			res.send({
+				status: false,
+				message: 'Token expired!',
+				data: {}
+			});
 		}
 		else {
 			if( !req.body.USER_AUTH_CODE || !req.body.EMPLOYEE_NIK || !req.body.USERNAME || !req.body.IMEI ) {
