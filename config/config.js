@@ -1,6 +1,6 @@
 module.exports = {
 	app_port: process.env.PORT || 3001,
-	app_name: 'Microservices Gateway',
+	app_name: 'Microservice Auth',
 	secret_key: 'T4pagri123#',
 	url: {
 		microservices: {
