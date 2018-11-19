@@ -37,18 +37,18 @@ module.exports = ( app ) => {
 	app.post( '/api/inspection', verifyToken, microserviceInspection.create );
 
 	// ROUTE - MASTERDATA BLOCK
-	app.get( '/api/masterdata/block', verifyToken, microserviceMasterdata.blockFind );
-	app.get( '/api/masterdata/block/:id', verifyToken, microserviceMasterdata.blockFindOne );
-	app.post( '/api/masterdata/block', verifyToken, microserviceMasterdata.blockCreate );
-	app.put( '/api/masterdata/block/:id', verifyToken, microserviceMasterdata.blockUpdate );
-	app.delete( '/api/masterdata/block/:id', verifyToken, microserviceMasterdata.blockDelete );
+	app.get( '/api/hectare-statement/block', verifyToken, microserviceMasterdata.blockFind );
+	app.get( '/api/hectare-statement/block/:id', verifyToken, microserviceMasterdata.blockFindOne );
+	app.post( '/api/hectare-statement/block', verifyToken, microserviceMasterdata.blockCreate );
+	app.put( '/api/hectare-statement/block/:id', verifyToken, microserviceMasterdata.blockUpdate );
+	app.delete( '/api/hectare-statement/block/:id', verifyToken, microserviceMasterdata.blockDelete );
 	
 	// ROUTE - MASTERDATA AFDELING
-	app.get( '/api/masterdata/afdeling', verifyToken, microserviceMasterdata.afdelingFind );
-	app.get( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingFindOne );
-	app.post( '/api/masterdata/afdeling', verifyToken, microserviceMasterdata.afdelingCreate );
-	app.put( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
-	app.delete( '/api/masterdata/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
+	app.get( '/api/hectare-statement/afdeling', verifyToken, microserviceMasterdata.afdelingFind );
+	app.get( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingFindOne );
+	app.post( '/api/hectare-statement/afdeling', verifyToken, microserviceMasterdata.afdelingCreate );
+	app.put( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
+	app.delete( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
 
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
@@ -64,9 +64,6 @@ module.exports = ( app ) => {
 
 	// ROUTE - Sync DB Log
 	app.post( '/api/sync-db-log', syncDBLog.create );
-
-
-
 
 
 

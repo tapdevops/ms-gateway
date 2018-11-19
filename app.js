@@ -71,6 +71,9 @@ app.post( '/api/login', ( req, res ) => {
 		// 1. Check ke LDAP
 		client.post( url, args, function ( data, response ) {
 			// 2.1. Kondisi data terdapat pada LDAP
+
+			
+
 			if ( data.status == true ) {
 
 				const loginModel = require( './app/models/login.js' );
@@ -269,8 +272,7 @@ app.post( '/api/login', ( req, res ) => {
 					message: 'Username/Password anda salah.',
 					data: {}
 				} );
-			}
-		
+			}		
 		});
 	}
 	else {

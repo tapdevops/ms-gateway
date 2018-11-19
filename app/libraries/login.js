@@ -17,7 +17,7 @@ module.exports.setLogLogin = function( request ) {
 				if ( !data ) {
 					console.log( 'Set Login Update Error 5' );
 				}
-				console.log( 'Set Login Update Error 4' );
+				console.log( 'Success' );
 			}).catch( err => {
 				if( err.kind === 'ObjectId' ) {
 					console.log( 'Set Login Update Error 3' );
@@ -60,7 +60,7 @@ module.exports.setLogin = function ( request ) {
 				if ( !data ) {
 					console.log( 'Set Login Error 2' );
 				}
-				
+
 				const loginLog = new loginLogModel({
 					USER_AUTH_CODE: request.USER_AUTH_CODE || "",
 					EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
