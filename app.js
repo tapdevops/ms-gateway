@@ -337,33 +337,30 @@ app.post( '/api/logout', verifyToken, ( req, res) => {
 			}, { new: true } )
 			.then( data => {
 				if( !data ) {
-					console.log('A');
 					return res.status( 404 ).send( {
 						status: false,
-						message: "Data error updating 2",
+						message: "Logout gagal",
 						data: {}
 					} );
 				}
 				else {
-					console.log('B');
 					res.send({
 						status: true,
-						message: 'Success',
+						message: 'Sukses, anda telah berhasil logout',
 						data: {}
 					});
 				}
 			}).catch( err => {
 				if( err.kind === 'ObjectId' ) {
-					console.log('C');
 					return res.status( 404 ).send( {
 						status: false,
-						message: "Data not found 2",
+						message: "Logout error 2",
 						data: {}
 					} );
 				}
 				return res.status( 500 ).send( {
 					status: false,
-					message: "Data error updating",
+					message: "Logout error",
 					data: {}
 				} );
 			});
