@@ -60,7 +60,7 @@ exports.findOne = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.masterdata_afdeling + '/' + req.params.id;
+			var url = config.url.microservices.finding + '/' + req.params.id;
 			var args = {
 				headers: { "Content-Type": "application/json" }
 			};
