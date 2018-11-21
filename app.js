@@ -215,7 +215,7 @@ app.post( '/api/login', ( req, res ) => {
 								}, 
 								config.secret_key, 
 								{ 
-									expiresIn: '24h' 
+									expiresIn: '120s' 
 								} 
 							);
 
