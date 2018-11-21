@@ -66,11 +66,7 @@ module.exports = ( app ) => {
 	app.post( '/api/sync-db-log', syncDBLog.create );
 
 
-
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );
-
-
-
 
 }

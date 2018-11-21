@@ -125,9 +125,10 @@ app.post( '/api/login', ( req, res ) => {
 									}, 
 									config.secret_key, 
 									{ 
-										expiresIn: '24h' 
+										expiresIn: '120s' 
 									} 
 								);
+
 								var login_request = {
 									USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
 									EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK,
@@ -329,38 +330,66 @@ app.post( '/api/logout', verifyToken, ( req, res) => {
 
 			const loginModel = require( './app/models/login.js' );
 
-			loginModel.findOneAndUpdate( { 
-				USER_AUTH_CODE: req.body.user_auth_code
-			}, {
-				ACCESS_TOKEN: "",
-				UPDATE_TIME: new Date()
-			}, { new: true } )
-			.then( data => {
-				if( !data ) {
-					return res.status( 404 ).send( {
+			loginModel.findOne( { 
+				USER_AUTH_CODE: req.body.user_auth_code,
+				ACCESS_TOKEN: req.token,
+			} ).then( data => {
+				console.log( data );
+				if ( !data ) {
+					res.send({
 						status: false,
-						message: "Logout gagal",
+						message: 'Access Denied, token dan auth code tidak cocok.',
 						data: {}
-					} );
+					});
 				}
 				else {
-					res.send({
-						status: true,
-						message: 'Sukses, anda telah berhasil logout',
-						data: {}
+					loginModel.findOneAndUpdate( { 
+						USER_AUTH_CODE: req.body.user_auth_code
+					}, {
+						ACCESS_TOKEN: "",
+						UPDATE_TIME: new Date()
+					}, { new: true } )
+					.then( data => {
+						if( !data ) {
+							return res.status( 404 ).send( {
+								status: false,
+								message: "Logout gagal",
+								data: {}
+							} );
+						}
+						else {
+							res.send({
+								status: true,
+								message: 'Sukses, anda telah berhasil logout',
+								data: {}
+							});
+						}
+					}).catch( err => {
+						if( err.kind === 'ObjectId' ) {
+							return res.status( 404 ).send( {
+								status: false,
+								message: "Logout error 2",
+								data: {}
+							} );
+						}
+						return res.status( 500 ).send( {
+							status: false,
+							message: "Logout error",
+							data: {}
+						} );
 					});
 				}
 			}).catch( err => {
 				if( err.kind === 'ObjectId' ) {
 					return res.status( 404 ).send( {
 						status: false,
-						message: "Logout error 2",
+						message: "Access Denied 2",
 						data: {}
 					} );
 				}
 				return res.status( 500 ).send( {
 					status: false,
-					message: "Logout error",
+					message: "Access Denied",
 					data: {}
 				} );
 			});
