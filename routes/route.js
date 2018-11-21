@@ -21,6 +21,7 @@ module.exports = ( app ) => {
 	//const auth = require( '../app/controllers/auth.js' );
 	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
 	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
+	const microserviceImage = require( '../app/controllers/microserviceImage.js' );
 	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
 	const pjs = require( '../app/controllers/pjs.js' );
 	const pjsLog = require( '../app/controllers/pjsLog.js' );
@@ -50,6 +51,7 @@ module.exports = ( app ) => {
 	app.put( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
 	app.delete( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
 
+	app.post( '/api/upload/image', verifyToken, microserviceImage.create  );
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
 

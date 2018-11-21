@@ -6,8 +6,9 @@ module.exports = {
 		microservices: {
 			inspection: 			'http://149.129.242.205:3002/api/inspection',
 			masterdata_block: 		'http://149.129.242.205:3003/block',
-			masterdata_afdeling:	'http://149.129.242.205:3003/afdeling',
-			ldap: 					'http://tap-ldapdev.tap-agri.com/login'
+			masterdata_afdeling:		'http://149.129.242.205:3003/afdeling',
+			upload_image: 			'http://149.129.242.205:3004/upload/image',
+			ldap: 				'http://tap-ldapdev.tap-agri.com/login'
 		}
 	}
 }
