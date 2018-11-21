@@ -22,6 +22,7 @@ module.exports = ( app ) => {
 	const microserviceInspection = require( '../app/controllers/microserviceInspection.js' );
 	const microserviceMasterdata = require( '../app/controllers/microserviceMasterdata.js' );
 	const microserviceImages = require( '../app/controllers/microserviceImages.js' );
+	const microserviceFinding = require( '../app/controllers/microserviceFinding.js' );
 	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
 	const pjs = require( '../app/controllers/pjs.js' );
 	const pjsLog = require( '../app/controllers/pjsLog.js' );
@@ -50,6 +51,13 @@ module.exports = ( app ) => {
 	app.post( '/api/hectare-statement/afdeling', verifyToken, microserviceMasterdata.afdelingCreate );
 	app.put( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
 	app.delete( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
+
+	// ROUTE - MASTERDATA AFDELING
+	app.get( '/api/finding', verifyToken, microserviceFinding.find );
+	app.get( '/api/finding/:id', verifyToken, microserviceFinding.findOne ); // MISS
+	app.post( '/api/finding', verifyToken, microserviceFinding.create );
+	app.put( '/api/finding/:id', verifyToken, microserviceFinding.update );
+	app.delete( '/api/finding/:id', verifyToken, microserviceFinding.delete );
 
 	app.post( '/api/upload/image', verifyToken, microserviceImages.create  );
 	// ROUTE - EMPLOYEE HRIS
