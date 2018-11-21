@@ -8,6 +8,7 @@
 
 require('express-group-routes'); 								// Express Group Routes
 const express = require( 'express' );							// Import Express
+const expressUpload = require( 'express-fileupload' );			// Import Express Fileupload
 const mongoose = require( 'mongoose' );							// Import Mongoose
 const bodyParser = require( 'body-parser' ); 					// Import Body Parser
 const Client = require('node-rest-client').Client; 				// Import REST Client
@@ -37,6 +38,9 @@ app.use( bodyParser.urlencoded( { extended: false } ) );
 
 // Parse request of content-type - application/json
 app.use( bodyParser.json() );
+
+// Use Express Upload
+app.use( expressUpload() );
 
 // Server Running Message
 app.listen( config.app_port, () => {
@@ -124,7 +128,7 @@ app.post( '/api/login', ( req, res ) => {
 									}, 
 									config.secret_key, 
 									{ 
-										expiresIn: '120s' 
+										expiresIn: '6h'
 									} 
 								);
 
@@ -215,7 +219,7 @@ app.post( '/api/login', ( req, res ) => {
 								}, 
 								config.secret_key, 
 								{ 
-									expiresIn: '120s' 
+									expiresIn: '6h' 
 								} 
 							);
 
