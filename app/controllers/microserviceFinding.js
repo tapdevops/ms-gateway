@@ -86,8 +86,12 @@ exports.update = async ( req, res ) => {
 				headers: { "Content-Type": "application/json" }
 			};
 
+			console.log(req.body);
+
 			client.put( url, args, function ( data, response ) {
 				res.json( { data } );
+				console.log(data);
+				console.log(response);
 			});
 		}
 	} );
