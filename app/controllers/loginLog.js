@@ -29,6 +29,7 @@ exports.create = ( req, res ) => {
 
 			const loginLog = new loginLogModel({
 				USER_AUTH_CODE: req.body.USER_AUTH_CODE || "",
+				ACCESS_TOKEN: req.token || "",
 				EMPLOYEE_NIK: req.body.EMPLOYEE_NIK || "",
 				USERNAME: req.body.USERNAME || "",
 				IMEI: req.body.IMEI || "",

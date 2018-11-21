@@ -102,7 +102,6 @@ app.post( '/api/login', ( req, res ) => {
 							}
 
 							var data_pjs = data;
-							console.log( data_pjs );
 
 							// Kondisi data ada di PJS
 							userAuth.findOne( { 
@@ -143,7 +142,6 @@ app.post( '/api/login', ( req, res ) => {
 									DELETE_TIME: ''
 								};
 
-								console.log( login_request );
 
 								loginLib.setLogin( login_request );
 								//loginLib.setLogLogin( login_request );

@@ -61,8 +61,10 @@ module.exports.setLogin = function ( request ) {
 					console.log( 'Set Login Error 2' );
 				}
 
+				console.log( 'TOKEN :::: ' + request.ACCESS_TOKEN );
 				const loginLog = new loginLogModel({
 					USER_AUTH_CODE: request.USER_AUTH_CODE || "",
+					ACCESS_TOKEN: data.ACCESS_TOKEN || "",
 					EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
 					USERNAME: request.USERNAME || "",
 					IMEI: request.IMEI || "",
@@ -108,6 +110,7 @@ module.exports.setLogin = function ( request ) {
 				else {
 					const loginLog = new loginLogModel({
 						USER_AUTH_CODE: request.USER_AUTH_CODE || "",
+						ACCESS_TOKEN: data.ACCESS_TOKEN || "",
 						EMPLOYEE_NIK: request.EMPLOYEE_NIK || "",
 						USERNAME: request.USERNAME || "",
 						IMEI: request.IMEI || "",

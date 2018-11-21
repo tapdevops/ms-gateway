@@ -2,6 +2,7 @@ const mongoose = require( 'mongoose' );
 
 const LoginLogSchema = mongoose.Schema( {
 	USER_AUTH_CODE: String,
+	ACCESS_TOKEN: String,
 	EMPLOYEE_NIK: String,
 	USERNAME: String,
 	IMEI: String,
