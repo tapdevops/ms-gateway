@@ -1,13 +1,15 @@
 const Client = require('node-rest-client').Client; 				// Import REST Client
 const config = require( '../../config/config.js' );
 let jwt = require( 'jsonwebtoken' );
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
 
 // AFDELING - FIND
 exports.afdelingFind = async ( req, res ) => {
 	url_query = req.query;
 	var url_query_length = Object.keys( url_query ).length;
 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -33,7 +35,7 @@ exports.afdelingFind = async ( req, res ) => {
 
 // AFDELING - CREATE
 exports.afdelingCreate = async ( req, res ) => {
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -54,7 +56,7 @@ exports.afdelingCreate = async ( req, res ) => {
 
 // AFDELING - FIND ONE
 exports.afdelingFindOne = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -74,7 +76,7 @@ exports.afdelingFindOne = async ( req, res ) => {
 
 // AFDELING - FIND ONE
 exports.afdelingUpdate = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -95,7 +97,7 @@ exports.afdelingUpdate = async ( req, res ) => {
 
 // AFDELING - DELETE
 exports.afdelingDelete = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -119,7 +121,7 @@ exports.blockFind = async ( req, res ) => {
 	url_query = req.query;
 	var url_query_length = Object.keys( url_query ).length;
 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -145,7 +147,7 @@ exports.blockFind = async ( req, res ) => {
 
 // BLOCK - CREATE
 exports.blockCreate = async ( req, res ) => {
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -166,7 +168,7 @@ exports.blockCreate = async ( req, res ) => {
 
 // BLOCK - FIND ONE
 exports.blockFindOne = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -186,7 +188,7 @@ exports.blockFindOne = async ( req, res ) => {
 
 // BLOCK - FIND ONE
 exports.blockUpdate = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -207,7 +209,7 @@ exports.blockUpdate = async ( req, res ) => {
 
 // BLOCK - DELETE
 exports.blockDelete = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}

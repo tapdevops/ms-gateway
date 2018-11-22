@@ -18,7 +18,11 @@ let bearerToken = require( 'express-bearer-token' ); 			// Import Express Bearer
 const app = express(); 											// Define App
 const config = require( './config/config.js' ); 				// Config
 const dbConfig = require( './config/database.js' ); 			// Database Config
+const tokenLib = require( './app/libraries/token.js' ); 		// Database Config
 let db = mongoose.connection;
+
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
 
 // Setup Database
 mongoose.Promise = global.Promise;
@@ -47,20 +51,67 @@ app.listen( config.app_port, () => {
 	console.log( config.app_name + ' running on ' + config.app_port )
 } );
 
+app.get( '/testing-token', ( req, res ) => {
+
+	// Data Token
+	var claims = {
+		"_id": "1234567890",
+		"USERNAME": "John Doe",
+		"USER_AUTH_CODE": "ASISTEN_LAPANGAN"
+	}
+	/*
+	// Compile JWT
+	var njwt = nJwt.create( claims, config.secret_key,"HS256" );
+
+	// Set Expiration Time
+	njwt.setExpiration( new Date().getTime() + ( 60 * 1000 ) );
+
+	// Compile Token
+	var token = njwt.compact();
+
+	console.log( 'Encode ----------------------' )
+	console.log( token );
+	console.log( 'Decode ----------------------' )
+	console.log( nJwt.verify( token, config.secret_key, 'HS256' ) );
+
+	res.json({
+		encode: token,
+		decode: nJwt.verify( token, config.secret_key, 'HS256')
+	});*/
+	//console.log( //generateToken( claims ) );
+	res.json({
+		message: tokenLib.generateToken( claims )
+	})
+} );
+
+app.get( '/testing-token-check', verifyToken, ( req, res ) => {
+
+	// Check token availability
+	//njwt.verify( req.token, config.secret_key, 'HS256', ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+		console.log(err);
+		console.log(authData);
+		res.json({
+			err: err,
+			authData: authData
+		} );
+	} );
+} );
+
 // Login
 app.post( '/api/login', ( req, res ) => {
 
 	console.log(req.body.imei);
 
 	if ( req.body.username && req.body.password ) {
-		/*
+		
 		if( !req.body.imei ) {
 			return res.status( 400 ).send({
 				status: false,
 				message: 'Invalid IMEI',
 				data: {}
 			});
-		}*/
+		}
 
 		var client = new Client();
 		var url = config.url.microservices.ldap;
@@ -111,7 +162,7 @@ app.post( '/api/login', ( req, res ) => {
 							userAuth.findOne( { 
 								EMPLOYEE_NIK: data_pjs.EMPLOYEE_NIK
 							} ).then( data_auth => {
-								console.log( data_auth );
+
 								if ( !data_auth ) {
 									return res.status( 404 ).send({
 										status: false,
@@ -120,17 +171,15 @@ app.post( '/api/login', ( req, res ) => {
 									});
 								}
 
-								let token = jwt.sign( 
-									{ 
-										username: req.body.username,
-										user_auth_code: data_auth.USER_AUTH_CODE,
-										_id: data_auth._id 
-									}, 
-									config.secret_key, 
-									{ 
-										expiresIn: '6h'
-									} 
-								);
+								var claims = {
+									USERNAME: req.body.username,
+									USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+									USER_ROLE: data_auth.USER_ROLE,
+									LOCATION_CODE: data_auth.LOCATION_CODE,
+									REFFERENCE_ROLE: data_auth.REF_ROLE,
+									EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK
+								}
+								var token = tokenLib.generateToken( claims );
 
 								var login_request = {
 									USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
@@ -148,7 +197,6 @@ app.post( '/api/login', ( req, res ) => {
 
 
 								loginLib.setLogin( login_request );
-								//loginLib.setLogLogin( login_request );
 
 								// Kondisi data ada di PJS
 								res.json({
@@ -211,17 +259,15 @@ app.post( '/api/login', ( req, res ) => {
 								});
 							}
 
-							let token = jwt.sign( 
-								{ 
-									username: req.body.username,
-									user_auth_code: data_auth.USER_AUTH_CODE,
-									_id: data_auth._id 
-								}, 
-								config.secret_key, 
-								{ 
-									expiresIn: '6h' 
-								} 
-							);
+							var claims = {
+								USERNAME: req.body.username,
+								USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
+								USER_ROLE: data_auth.USER_ROLE,
+								LOCATION_CODE: data_auth.LOCATION_CODE,
+								REFFERENCE_ROLE: data_auth.REF_ROLE,
+								EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK
+							}
+							var token = tokenLib.generateToken( claims );
 
 							var login_request = {
 								USER_AUTH_CODE: data_auth.USER_AUTH_CODE,
@@ -238,7 +284,6 @@ app.post( '/api/login', ( req, res ) => {
 							};
 
 							loginLib.setLogin( login_request );
-							//loginLib.setLogLogin( login_request );
 
 							// Kondisi data ada di HRIS
 							res.json({
@@ -313,7 +358,7 @@ app.get( '/', ( req, res ) => {
 } );
 
 app.post( '/api/logout', verifyToken, ( req, res) => {
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.send({
 				status: false,
@@ -418,6 +463,3 @@ function verifyToken( req, res, next ) {
 		res.sendStatus( 403 );
 	}
 }
-
-
-

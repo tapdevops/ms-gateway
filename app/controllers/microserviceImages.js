@@ -3,11 +3,13 @@ const fs = require( 'file-system' );
 const request = require( 'request' );
 const config = require( '../../config/config.js' );
 let jwt = require( 'jsonwebtoken' );
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
 
 // IMAGE - CREATE
 exports.create = async ( req, res ) => {
 	
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}

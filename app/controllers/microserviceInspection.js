@@ -1,9 +1,11 @@
 const Client = require('node-rest-client').Client; 				// Import REST Client
 const config = require( '../../config/config.js' );
 let jwt = require( 'jsonwebtoken' );
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
 
 exports.find = async ( req, res ) => {
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -23,7 +25,7 @@ exports.find = async ( req, res ) => {
 };
 
 exports.create = async ( req, res ) => {
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}

@@ -1,13 +1,16 @@
 const Client = require('node-rest-client').Client; 				// Import REST Client
 const config = require( '../../config/config.js' );
 let jwt = require( 'jsonwebtoken' );
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
 
 // AFDELING - FIND
 exports.find = async ( req, res ) => {
 	url_query = req.query;
 	var url_query_length = Object.keys( url_query ).length;
 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+	//jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -20,8 +23,10 @@ exports.find = async ( req, res ) => {
 			}
 			
 			var args = {
-				headers: { "Content-Type": "application/json" }
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
+
+			console.log()
 
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
@@ -33,7 +38,8 @@ exports.find = async ( req, res ) => {
 
 // AFDELING - CREATE
 exports.create = async ( req, res ) => {
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -42,7 +48,10 @@ exports.create = async ( req, res ) => {
 			var url = config.url.microservices.finding;
 			var args = {
 				data: req.body,
-				headers: { "Content-Type": "application/json" }
+				headers: { 
+					"Content-Type": "application/json",
+					"Authorization": req.headers.authorization
+				}
 			};
 
 			client.post( url, args, function ( data, response ) {
@@ -54,7 +63,7 @@ exports.create = async ( req, res ) => {
 
 // AFDELING - FIND ONE
 exports.findOne = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -62,7 +71,7 @@ exports.findOne = async ( req, res ) => {
 			var client = new Client();
 			var url = config.url.microservices.finding + '/' + req.params.id;
 			var args = {
-				headers: { "Content-Type": "application/json" }
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
 
 			client.get( url, args, function (data, response) {
@@ -74,7 +83,7 @@ exports.findOne = async ( req, res ) => {
 
 // AFDELING - UPDATE
 exports.update = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -83,15 +92,11 @@ exports.update = async ( req, res ) => {
 			var url = config.url.microservices.finding + '/' + req.params.id;
 			var args = {
 				data: req.body,
-				headers: { "Content-Type": "application/json" }
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
-
-			console.log(req.body);
 
 			client.put( url, args, function ( data, response ) {
 				res.json( { data } );
-				console.log(data);
-				console.log(response);
 			});
 		}
 	} );
@@ -99,7 +104,7 @@ exports.update = async ( req, res ) => {
 
 // AFDELING - DELETE
 exports.delete = async ( req, res ) => { 
-	jwt.verify( req.token, config.secret_key, ( err, authData ) => {
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}
@@ -107,10 +112,9 @@ exports.delete = async ( req, res ) => {
 			var client = new Client();
 			var url = config.url.microservices.finding + '/' + req.params.id;
 			var args = {
-				headers: { "Content-Type": "application/json" }
+				headers: { "Content-Type": "application/json", "Authorization": req.headers.authorization }
 			};
 
-			console.log( req );
 			client.delete( url, args, function (data, response) {
 				res.json( { data } );
 			});

@@ -38,7 +38,7 @@ module.exports.setLogin = function ( request ) {
 		USERNAME: request.USERNAME || "",
 		ACCESS_TOKEN: request.ACCESS_TOKEN || "",
 		LAST_LOGIN: new Date(),
-		LOG_LOGIN: request.LOG_LOGIN || "",
+		LOG_LOGIN: 1,
 		IMEI: request.IMEI || "",
 		INSERT_USER: request.USERNAME || "",
 		INSERT_TIME: new Date(),
@@ -122,7 +122,34 @@ module.exports.setLogin = function ( request ) {
 						if ( !data ) {
 							console.log( 'Set Login Log Error 2' );
 						}
-						console.log( 'Success' );
+						
+						loginLogModel.find( { USER_AUTH_CODE : request.USER_AUTH_CODE } ).count()
+						.then( data => {
+							if ( !data ) {
+								console.log( 'Set Log Login Count Error 2' );
+							}
+							else {
+								loginModel.findOneAndUpdate( { 
+									USER_AUTH_CODE: request.USER_AUTH_CODE
+								}, {
+									LOG_LOGIN: data
+								}, { new: true } )
+								.then( data => {
+									if ( !data ) {
+										console.log( 'Set Login Update Error 5' );
+									}
+									console.log( 'Success' );
+								}).catch( err => {
+									if( err.kind === 'ObjectId' ) {
+										console.log( 'Set Login Update Error 3' );
+									}
+									console.log( 'Set Log Login Count Error 2' );
+								});
+							}
+						} ).catch( err => {
+							console.log( 'Set Log Login Count Error' );
+						} );
+						
 					} ).catch( err => {
 						console.log( 'Set Login Log Error 2' );
 					} );
