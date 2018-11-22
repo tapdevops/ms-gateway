@@ -28,7 +28,7 @@ module.exports = {
 			masterdata_block: 		'http://149.129.242.205:3003/block',
 			masterdata_afdeling:	'http://149.129.242.205:3003/afdeling',
 			images: 				'http://149.129.242.205:3004/upload/image',
-			finding:				'http://localhost:3005/finding',
+			finding:				'http://149.129.242.205:3005/finding',
 			ldap: 					'http://tap-ldapdev.tap-agri.com/login'
 		}
 	}
