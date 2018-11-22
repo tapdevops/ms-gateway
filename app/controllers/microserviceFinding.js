@@ -48,7 +48,7 @@ exports.findByTokenAuthCode = async ( req, res ) => {
 		}
 		else {
 			var client = new Client();
-			var url = config.url.microservices.finding;
+			var url = config.url.microservices.finding_history;
 
 			if ( url_query_length > 0 ) {
 				url = url + req._parsedUrl.search;
