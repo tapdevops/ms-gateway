@@ -52,9 +52,10 @@ module.exports = ( app ) => {
 	app.put( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingUpdate );
 	app.delete( '/api/hectare-statement/afdeling/:id', verifyToken, microserviceMasterdata.afdelingDelete );
 
-	// ROUTE - MASTERDATA AFDELING
+	// ROUTE - MASTERDATA FINDING
 	app.get( '/api/finding', verifyToken, microserviceFinding.find );
-	app.get( '/api/finding/:id', verifyToken, microserviceFinding.findOne ); // MISS
+	app.get( '/api/finding-history', verifyToken, microserviceFinding.findByTokenAuthCode );
+	app.get( '/api/finding/:id', verifyToken, microserviceFinding.findOne );
 	app.post( '/api/finding', verifyToken, microserviceFinding.create );
 	app.put( '/api/finding/:id', verifyToken, microserviceFinding.update );
 	app.delete( '/api/finding/:id', verifyToken, microserviceFinding.delete );
