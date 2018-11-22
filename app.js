@@ -177,7 +177,8 @@ app.post( '/api/login', ( req, res ) => {
 									USER_ROLE: data_auth.USER_ROLE,
 									LOCATION_CODE: data_auth.LOCATION_CODE,
 									REFFERENCE_ROLE: data_auth.REF_ROLE,
-									EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK
+									EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK,
+									IMEI: req.body.imei
 								}
 								var token = tokenLib.generateToken( claims );
 
@@ -265,7 +266,8 @@ app.post( '/api/login', ( req, res ) => {
 								USER_ROLE: data_auth.USER_ROLE,
 								LOCATION_CODE: data_auth.LOCATION_CODE,
 								REFFERENCE_ROLE: data_auth.REF_ROLE,
-								EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK
+								EMPLOYEE_NIK: data_auth.EMPLOYEE_NIK,
+								IMEI: req.body.imei
 							}
 							var token = tokenLib.generateToken( claims );
 
