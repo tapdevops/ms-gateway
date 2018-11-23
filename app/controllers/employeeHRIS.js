@@ -6,6 +6,7 @@ const date = require( '../libraries/date.js' );
 const dateAndTimes = require( 'date-and-time' );
 
 // Create or update data
+
 exports.createOrUpdate = ( req, res ) => {
 	
 	if( !req.body.EMPLOYEE_NIK ) {
