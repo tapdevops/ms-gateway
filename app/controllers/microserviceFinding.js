@@ -10,7 +10,6 @@ exports.find = async ( req, res ) => {
 	var url_query_length = Object.keys( url_query ).length;
 
 	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-	//jwt.verify( req.token, config.secret_key, ( err, authData ) => {
 		if ( err ) {
 			res.sendStatus( 403 );
 		}

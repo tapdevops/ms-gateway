@@ -35,8 +35,20 @@ module.exports = ( app ) => {
 	//app.get( '/api/test', verifyToken, auth.test );
 
 	// ROUTE - INSPECTION
-	app.get( '/api/inspection', verifyToken, microserviceInspection.find );
+	//app.get( '/api/inspection', verifyToken, microserviceInspection.find );
 	app.post( '/api/inspection', verifyToken, microserviceInspection.create );
+	app.post( '/api/inspection-header', verifyToken, microserviceInspection.createH );
+	app.get( '/api/inspection-header', verifyToken, microserviceInspection.findH );
+	app.get( '/api/inspection-header/:id', verifyToken, microserviceInspection.findOneH );
+	app.put( '/api/inspection-header/:id', verifyToken, microserviceInspection.updateH );
+	app.delete( '/api/inspection-header/:id', verifyToken, microserviceInspection.deleteH );
+	app.post( '/api/inspection-detail', verifyToken, microserviceInspection.createD );
+	app.get( '/api/inspection-detail', verifyToken, microserviceInspection.findD );
+	app.get( '/api/inspection-detail/:id', verifyToken, microserviceInspection.findOneD );
+	app.put( '/api/inspection-detail/:id', verifyToken, microserviceInspection.updateD );
+	app.delete( '/api/inspection-detail/:id', verifyToken, microserviceInspection.deleteD );
+
+	app.post( '/api/inspection-tracking', verifyToken, microserviceInspection.createTracking );
 
 	// ROUTE - MASTERDATA BLOCK
 	app.get( '/api/hectare-statement/block', verifyToken, microserviceMasterdata.blockFind );
