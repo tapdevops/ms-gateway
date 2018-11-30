@@ -10,7 +10,7 @@ const dateAndTimes = require( 'date-and-time' );
 exports.createOrUpdate = ( req, res ) => {
 	
 	if( !req.body.EMPLOYEE_NIK ) {
-		return res.status( 400 ).send({
+		return res.send({
 			status: false,
 			message: 'Invalid input',
 			data: {}
@@ -64,14 +64,13 @@ exports.createOrUpdate = ( req, res ) => {
 			
 			empHRIS.save()
 			.then( data => {
-				console.log(data);
 				res.send({
 					status: true,
 					message: 'Success 2',
 					data: {}
 				});
 			} ).catch( err => {
-				res.status( 500 ).send( {
+				res.send( {
 					status: false,
 					message: 'Some error occurred while creating data',
 					data: {}
@@ -122,15 +121,13 @@ exports.createOrUpdate = ( req, res ) => {
 				}, { new: true } )
 				.then( data => {
 					if( !data ) {
-						console.log('A');
-						return res.status( 404 ).send( {
+						return res.send( {
 							status: false,
 							message: "Data error updating 2",
 							data: {}
 						} );
 					}
 					else {
-						console.log('B');
 						res.send({
 							status: true,
 							message: 'Success',
@@ -139,14 +136,13 @@ exports.createOrUpdate = ( req, res ) => {
 					}
 				}).catch( err => {
 					if( err.kind === 'ObjectId' ) {
-						console.log('C');
-						return res.status( 404 ).send( {
+						return res.send( {
 							status: false,
 							message: "Data not found 2",
 							data: {}
 						} );
 					}
-					return res.status( 500 ).send( {
+					return res.send( {
 						status: false,
 						message: "Data error updating",
 						data: {}
@@ -166,14 +162,14 @@ exports.createOrUpdate = ( req, res ) => {
 		
 	} ).catch( err => {
 		if( err.kind === 'ObjectId' ) {
-			return res.status( 404 ).send({
+			return res.send({
 				status: false,
 				message: "Data not found 1",
 				data: {}
 			});
 		}
 
-		return res.status( 500 ).send({
+		return res.send({
 			status: false,
 			message: "Error retrieving Data",
 			data: {}

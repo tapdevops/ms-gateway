@@ -24,11 +24,13 @@ module.exports = ( app ) => {
 	const microserviceImages = require( '../app/controllers/microserviceImages.js' );
 	const microserviceFinding = require( '../app/controllers/microserviceFinding.js' );
 	const employeeHRIS = require( '../app/controllers/employeeHRIS.js' );
+	const employeeSAP = require( '../app/controllers/employeeSAP.js' );
 	const pjs = require( '../app/controllers/pjs.js' );
 	const pjsLog = require( '../app/controllers/pjsLog.js' );
 	const loginLog = require( '../app/controllers/loginLog.js' );
 	const syncDBLog = require( '../app/controllers/syncDBLog.js' );
 	const modules = require( '../app/controllers/modules.js' );
+	const content = require( '../app/controllers/content.js' );
 	
 
 	// Routing: Auth
@@ -77,6 +79,9 @@ module.exports = ( app ) => {
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
 
+	// ROUTE - EMPLOYEE SAP
+	app.post( '/sync/employee-sap', employeeSAP.createOrUpdate );
+
 	// ROUTE - PJS
 	app.post( '/api/pjs/', verifyToken, pjs.create );
 
@@ -95,6 +100,9 @@ module.exports = ( app ) => {
 	app.get( '/api/modules/:id', verifyToken, modules.findOne );
 	app.put( '/api/modules/:id', verifyToken, modules.update );
 	app.delete( '/api/modules/:id', verifyToken, modules.delete );
+
+	// ROUTE - Content
+	app.get( '/api/content', content.find );
 
 
 	const test = require( '../app/controllers/test.js' );
