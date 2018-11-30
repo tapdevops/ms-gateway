@@ -28,6 +28,7 @@ module.exports = ( app ) => {
 	const pjsLog = require( '../app/controllers/pjsLog.js' );
 	const loginLog = require( '../app/controllers/loginLog.js' );
 	const syncDBLog = require( '../app/controllers/syncDBLog.js' );
+	const modules = require( '../app/controllers/modules.js' );
 	
 
 	// Routing: Auth
@@ -87,6 +88,13 @@ module.exports = ( app ) => {
 
 	// ROUTE - Sync DB Log
 	app.post( '/api/sync-db-log', syncDBLog.create );
+
+	// ROUTE - Web Menu
+	app.post( '/api/modules', verifyToken, modules.create );
+	app.get( '/api/modules', verifyToken, modules.find );
+	app.get( '/api/modules/:id', verifyToken, modules.findOne );
+	app.put( '/api/modules/:id', verifyToken, modules.update );
+	app.delete( '/api/modules/:id', verifyToken, modules.delete );
 
 
 	const test = require( '../app/controllers/test.js' );

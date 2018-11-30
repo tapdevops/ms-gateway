@@ -105,13 +105,13 @@ app.post( '/api/login', ( req, res ) => {
 
 	if ( req.body.username && req.body.password ) {
 		
-		if( !req.body.imei ) {
-			return res.status( 400 ).send({
-				status: false,
-				message: 'Invalid IMEI',
-				data: {}
-			});
-		}
+		//if( !req.body.imei ) {
+		//	return res.status( 400 ).send({
+		//		status: false,
+		//		message: 'Invalid IMEI',
+		//		data: {}
+		//	});
+		//}
 
 		var client = new Client();
 		var url = config.url.microservices.ldap;
@@ -122,6 +122,8 @@ app.post( '/api/login', ( req, res ) => {
 			},
 			headers: { "Content-Type": "application/json" }
 		};
+
+		console.log( req.body );
 		
 		// 1. Check ke LDAP
 		client.post( url, args, function ( data, response ) {
@@ -141,7 +143,6 @@ app.post( '/api/login', ( req, res ) => {
 					EMPLOYEE_USERNAME: req.body.username
 				} ).then( data => {
 
-					
 					// LOGIN via PJS
 					if( !data ) {
 
@@ -149,7 +150,7 @@ app.post( '/api/login', ( req, res ) => {
 							USERNAME: req.body.username
 						} ).then( data => {
 							if ( !data ) {
-								return res.status( 404 ).send({
+								return res.send({
 									status: false,
 									message: "User tersebut belum terdaftar (@PJS)",
 									data: {}
@@ -164,7 +165,7 @@ app.post( '/api/login', ( req, res ) => {
 							} ).then( data_auth => {
 
 								if ( !data_auth ) {
-									return res.status( 404 ).send({
+									return res.send({
 										status: false,
 										message: "User tersebut belum terdaftar (@PJS-2)",
 										data: {}
@@ -217,7 +218,7 @@ app.post( '/api/login', ( req, res ) => {
 
 							} ).catch( err => {
 								if( err.kind === 'ObjectId' ) {
-									return res.status( 404 ).send({
+									return res.send({
 										status: false,
 										message: "Error retrieving user 4zzz",
 										data: {}
@@ -232,13 +233,13 @@ app.post( '/api/login', ( req, res ) => {
 
 						} ).catch( err => {
 							if( err.kind === 'ObjectId' ) {
-								return res.status( 404 ).send({
+								return res.send({
 									status: false,
 									message: "Error retrieving user 4",
 									data: {}
 								});
 							}
-							return res.status( 500 ).send({
+							return res.send({
 								status: false,
 								message: "Error retrieving user 3",
 								data: {}
@@ -253,7 +254,7 @@ app.post( '/api/login', ( req, res ) => {
 							EMPLOYEE_NIK: data_hris.EMPLOYEE_NIK
 						} ).then( data_auth => {
 							if ( !data_auth ) {
-								return res.status( 404 ).send({
+								return res.send({
 									status: false,
 									message: "User tersebut belum terdaftar (@HRIS)",
 									data: {}
@@ -305,13 +306,13 @@ app.post( '/api/login', ( req, res ) => {
 
 						} ).catch( err => {
 							if( err.kind === 'ObjectId' ) {
-								return res.status( 404 ).send({
+								return res.send({
 									status: false,
 									message: "Error retrieving user 4zzz",
 									data: {}
 								});
 							}
-							return res.status( 500 ).send({
+							return res.send({
 								status: false,
 								message: "Error retrieving user 3zzz",
 								data: {}
@@ -322,13 +323,13 @@ app.post( '/api/login', ( req, res ) => {
 
 				} ).catch( err => {
 					if( err.kind === 'ObjectId' ) {
-						return res.status( 404 ).send({
+						return res.send({
 							status: false,
 							message: "Error retrieving user 2",
 							data: {}
 						});
 					}
-					return res.status( 500 ).send( {
+					return res.send( {
 						status: false,
 						message: "Error retrieving user 1",
 						data: {}
@@ -338,7 +339,7 @@ app.post( '/api/login', ( req, res ) => {
 			}
 			// 2.2. Kondisi false, data tidak ada di LDAP
 			else {
-				res.status( 403 ).send( {
+				res.send( {
 					status: false,
 					message: 'Username/Password anda salah.',
 					data: {}
