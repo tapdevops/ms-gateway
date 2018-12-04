@@ -31,6 +31,7 @@ module.exports = ( app ) => {
 	const syncDBLog = require( '../app/controllers/syncDBLog.js' );
 	const modules = require( '../app/controllers/modules.js' );
 	const content = require( '../app/controllers/content.js' );
+	const parameter = require( '../app/controllers/parameter.js' );
 	
 
 	// Routing: Auth
@@ -103,6 +104,9 @@ module.exports = ( app ) => {
 
 	// ROUTE - Content
 	app.get( '/api/content', content.find );
+
+	// ROUTE - Parameter
+	app.get( '/api/parameter', parameter.find );
 
 
 	const test = require( '../app/controllers/test.js' );
