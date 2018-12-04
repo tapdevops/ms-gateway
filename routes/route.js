@@ -75,7 +75,7 @@ module.exports = ( app ) => {
 	app.put( '/api/finding/:id', verifyToken, microserviceFinding.update );
 	app.delete( '/api/finding/:id', verifyToken, microserviceFinding.delete );
 
-	app.post( '/api/upload/image', verifyToken, microserviceImages.create  );
+	app.post( '/api/image/description', verifyToken, microserviceImages.create  );
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
 

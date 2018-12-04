@@ -51,53 +51,6 @@ app.listen( config.app_port, () => {
 	console.log( config.app_name + ' running on ' + config.app_port )
 } );
 
-app.get( '/testing-token', ( req, res ) => {
-
-	// Data Token
-	var claims = {
-		"_id": "1234567890",
-		"USERNAME": "John Doe",
-		"USER_AUTH_CODE": "ASISTEN_LAPANGAN"
-	}
-	/*
-	// Compile JWT
-	var njwt = nJwt.create( claims, config.secret_key,"HS256" );
-
-	// Set Expiration Time
-	njwt.setExpiration( new Date().getTime() + ( 60 * 1000 ) );
-
-	// Compile Token
-	var token = njwt.compact();
-
-	console.log( 'Encode ----------------------' )
-	console.log( token );
-	console.log( 'Decode ----------------------' )
-	console.log( nJwt.verify( token, config.secret_key, 'HS256' ) );
-
-	res.json({
-		encode: token,
-		decode: nJwt.verify( token, config.secret_key, 'HS256')
-	});*/
-	//console.log( //generateToken( claims ) );
-	res.json({
-		message: tokenLib.generateToken( claims )
-	})
-} );
-
-app.get( '/testing-token-check', verifyToken, ( req, res ) => {
-
-	// Check token availability
-	//njwt.verify( req.token, config.secret_key, 'HS256', ( err, authData ) => {
-	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
-		console.log(err);
-		console.log(authData);
-		res.json({
-			err: err,
-			authData: authData
-		} );
-	} );
-} );
-
 // Login
 app.post( '/api/login', ( req, res ) => {
 

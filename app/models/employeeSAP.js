@@ -104,6 +104,36 @@ const EmployeeSAPSchema = mongoose.Schema( {
 			return null;
 		}
 	},
+
+
+	BOND_EXPIRE_DATE: {
+		type: Date,
+		default: function() {
+			return null;
+		}
+	},
+	EPF_TYPE: String, 
+	EPF_PERCENTAGE: String, 
+	BANK_ACCOUNT_NUMBER: String, 
+	DESCRIPTION: String, 
+	EMPLOYEE_STATUS_INDICATOR: String, 
+	NIK_OLD: String, 
+	EXPIRE_DATE_CONTRACT: {
+		type: Date,
+		default: function() {
+			return null;
+		}
+	},
+	INDCTR: String, 
+	PERIOD_PROBATION: String, 
+	CONTRACT_NO: String, 
+	SPK_SK: String, 
+	NO_KK: String, 
+	BPJS_KETENAGAKERJAAN: String, 
+	BPJS_KESEHATAN: String, 
+	DOMISILI_ID: String, 
+	LICENSE_ID: String, 
+
 	FLAG_UPDATE: {
 		type: String,
 		default: function() {

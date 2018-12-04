@@ -30,7 +30,7 @@ module.exports = {
 			inspection_tracking: 	'http://localhost:3002/inspection-tracking',
 			masterdata_block: 		'http://localhost:3003/block',
 			masterdata_afdeling:	'http://localhost:3003/afdeling',
-			images: 				'http://localhost:3004/upload/image',
+			images: 				'http://localhost:3004/image',
 			finding:				'http://localhost:3005/finding',
 			finding_history:		'http://localhost:3005/finding-history',
 			ldap: 					'http://tap-ldapdev.tap-agri.com/login'
