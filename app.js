@@ -294,7 +294,7 @@ app.post( '/api/login', ( req, res ) => {
 			else {
 				res.send( {
 					status: false,
-					message: 'Username/Password anda salah.',
+					message: 'Username/Password anda salah. (LDAP Failed)',
 					data: {}
 				} );
 			}		
