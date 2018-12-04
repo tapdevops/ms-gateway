@@ -143,7 +143,11 @@ exports.blockFind = async ( req, res ) => {
 
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
