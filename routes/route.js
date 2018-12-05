@@ -34,6 +34,7 @@ module.exports = ( app ) => {
 	const parameter = require( '../app/controllers/parameter.js' );
 	const userAuthorization = require( '../app/controllers/userAuthorization.js' );
 	const contacts = require( '../app/controllers/contacts.js' );
+	const category = require( '../app/controllers/category.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -109,13 +110,16 @@ module.exports = ( app ) => {
 	// ROUTE - Parameter
 	app.get( '/api/parameter', parameter.find );
 
-	// ROUTE - Parameter
+	// ROUTE - Contacts
 	app.get( '/api/contacts', verifyToken, contacts.find );
 
 	// ROUTE - USER AUTHORIZATION
 	app.post( '/api/user-authorization', verifyToken, userAuthorization.createOrUpdate );
 	app.get( '/api/user-authorization', verifyToken, userAuthorization.find );
 
+	// ROUTE - CATEGORY
+	app.post( '/api/category', verifyToken, category.create );
+	app.get( '/api/category', verifyToken, category.find );
 
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );
