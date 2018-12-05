@@ -15,7 +15,7 @@ exports.find = ( req, res ) => {
 	url_query = req.query;
 		var url_query_length = Object.keys( url_query ).length;
 
-		parameterModel.find( url_query ).sort({NO_URUT: 'desc'})
+		parameterModel.find( url_query ).sort( { NO_URUT: 1 } )
 		.then( data => {
 			if( !data ) {
 				return res.send( {
