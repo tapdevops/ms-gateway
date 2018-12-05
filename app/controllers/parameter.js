@@ -13,34 +13,34 @@ const nJwt = require( 'njwt' );
 exports.find = ( req, res ) => {
 
 	url_query = req.query;
-		var url_query_length = Object.keys( url_query ).length;
+	var url_query_length = Object.keys( url_query ).length;
 
-		parameterModel.find( url_query ).sort( { NO_URUT: 'ascending' } )
-		.then( data => {
-			if( !data ) {
-				return res.send( {
-					status: false,
-					message: 'Data not found 2',
-					data: {}
-				} );
-			}
-			res.send( {
-				status: true,
-				message: 'Success',
-				data: data
-			} );
-		} ).catch( err => {
-			if( err.kind === 'ObjectId' ) {
-				return res.send( {
-					status: false,
-					message: 'Data not found 1',
-					data: {}
-				} );
-			}
+	parameterModel.find( url_query ).sort( { NO_URUT: 'ascending' } )
+	.then( data => {
+		if( !data ) {
 			return res.send( {
 				status: false,
-				message: 'Error retrieving data',
+				message: 'Data not found 2',
 				data: {}
 			} );
+		}
+		res.send( {
+			status: true,
+			message: 'Success',
+			data: data
 		} );
+	} ).catch( err => {
+		if( err.kind === 'ObjectId' ) {
+			return res.send( {
+				status: false,
+				message: 'Data not found 1',
+				data: {}
+			} );
+		}
+		return res.send( {
+			status: false,
+			message: 'Error retrieving data',
+			data: {}
+		} );
+	} );
 };
