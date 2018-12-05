@@ -4,7 +4,6 @@ const UserAuthorizationSchema = mongoose.Schema( {
 	MODULE_CODE: String,
 	PARAMETER_NAME: String,
 	STATUS: Number,
-	NO_URUT: Number,
 	INSERT_USER: String,
 	INSERT_TIME: {
 		type: Date,

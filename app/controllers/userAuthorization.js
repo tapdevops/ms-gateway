@@ -75,8 +75,7 @@ exports.createOrUpdate = ( req, res ) => {
 					const set = new userAuthorizationModel( {
 						MODULE_CODE: req.body.MODULE_CODE,
 						PARAMETER_NAME: req.body.PARAMETER_NAME,
-						STATUS: req.body.STATUS,
-						NO_URUT: req.body.NO_URUT,
+						STATUS: 1,
 						INSERT_USER: auth.USER_AUTH_CODE || "",
 						INSERT_TIME: new Date().getTime(),
 						UPDATE_USER: auth.USER_AUTH_CODE || "",
@@ -103,17 +102,22 @@ exports.createOrUpdate = ( req, res ) => {
 				}
 				// Kondisi data sudah ada, check value, jika sama tidak diupdate, jika beda diupdate dan dimasukkan ke Sync List
 				else {
+
+					var change_status_to = 0;
+					if ( data.STATUS == 0 ) {
+						change_status_to = 1;
+					}
+
 					userAuthorizationModel.findOneAndUpdate( { 
 						PARAMETER_NAME: req.body.PARAMETER_NAME,
 						MODULE_CODE: req.body.MODULE_CODE
 					}, {
-						STATUS: req.body.STATUS,
-						NO_URUT: req.body.NO_URUT,
+						STATUS: change_status_to,
 						UPDATE_USER: auth.USER_AUTH_CODE || "",
 						UPDATE_TIME: new Date().getTime()
 					}, { new: true } )
-					.then( data => {
-						if( !data ) {
+					.then( dataUpdate => {
+						if( !dataUpdate ) {
 							return res.send( {
 								status: false,
 								message: "Data error updating 2",
@@ -124,7 +128,7 @@ exports.createOrUpdate = ( req, res ) => {
 							res.send({
 								status: true,
 								message: 'Success',
-								data: {}
+								dataUpdate: {}
 							});
 						}
 					}).catch( err => {
