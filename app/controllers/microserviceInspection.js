@@ -25,7 +25,11 @@ exports.create = async ( req, res ) => {
 			console.log(args);
 
 			client.post( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -52,7 +56,11 @@ exports.createH = async ( req, res ) => {
 			console.log(args);
 
 			client.post( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -79,7 +87,11 @@ exports.createD = async ( req, res ) => {
 			console.log(args);
 
 			client.post( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -106,7 +118,11 @@ exports.createTracking = async ( req, res ) => {
 			console.log(args);
 
 			client.post( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -137,7 +153,11 @@ exports.findH = async ( req, res ) => {
 
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -168,7 +188,11 @@ exports.findD = async ( req, res ) => {
 
 			client.get( url, args, function (data, response) {
 				// parsed response body as js object
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -208,7 +232,11 @@ exports.findOneD = async ( req, res ) => {
 			};
 
 			client.get( url, args, function (data, response) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
@@ -229,7 +257,11 @@ exports.updateH = async ( req, res ) => {
 			};
 
 			client.put( url, args, function ( data, response ) {
-				res.json( { data } );
+				res.json( { 
+					"status": data.status,
+					"message": data.message,
+					"data": data.data
+				} );
 			});
 		}
 	} );
