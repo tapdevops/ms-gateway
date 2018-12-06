@@ -16,7 +16,19 @@ exports.find = ( req, res ) => {
 	url_query = req.query;
 	var url_query_length = Object.keys( url_query ).length;
 
-	viewUserModel.find( url_query )
+	viewUserModel.find( url_query, { 
+		USER_AUTH_CODE: 1, 
+		EMPLOYEE_NIK: 1, 
+		USER_ROLE: 1, 
+		LOCATION_CODE: 1, 
+		REF_ROLE: 1, 
+		"LOGIN.USERNAME": 1, 
+		"LOGIN.LOG_LOGIN": 1, 
+		"LOGIN.UPDATE_USER": 1, 
+		"LOGIN.UPDATE_TIME": 1, 
+		"PARAMETER.DESC": 1, 
+		_id: 0 } 
+	)
 	.then( data => {
 		if( !data ) {
 			return res.send( {
