@@ -9,11 +9,26 @@ const LoginSchema = mongoose.Schema( {
 	LOG_LOGIN: String,
 	IMEI: String,
 	INSERT_USER: String,
-	INSERT_TIME: String,
+	INSERT_TIME: {
+		type: Date,
+		default: function() {
+			return null;
+		}
+	},
 	UPDATE_USER: String,
-	UPDATE_TIME: String,
+	UPDATE_TIME: {
+		type: Date,
+		default: function() {
+			return null;
+		}
+	},
 	DELETE_USER: String,
-	DELETE_TIME: String
+	DELETE_TIME: {
+		type: Date,
+		default: function() {
+			return null;
+		}
+	}
 });
 
 module.exports = mongoose.model( 'Login', LoginSchema, 'TM_LOGIN' );

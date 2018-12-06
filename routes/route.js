@@ -35,6 +35,8 @@ module.exports = ( app ) => {
 	const userAuthorization = require( '../app/controllers/userAuthorization.js' );
 	const contacts = require( '../app/controllers/contacts.js' );
 	const category = require( '../app/controllers/category.js' );
+	const login = require( '../app/controllers/login.js' );
+	const masterUser = require( '../app/controllers/masterUser.js' );
 
 	// Routing: Auth
 	//app.post( '/api/login', auth.login );
@@ -113,6 +115,9 @@ module.exports = ( app ) => {
 	// ROUTE - Contacts
 	app.get( '/api/contacts', verifyToken, contacts.find );
 
+	// ROUTE - Login
+	app.get( '/api/login', verifyToken, login.find );
+
 	// ROUTE - USER AUTHORIZATION
 	app.post( '/api/user-authorization', verifyToken, userAuthorization.createOrUpdate );
 	app.get( '/api/user-authorization', verifyToken, userAuthorization.find );
@@ -120,6 +125,9 @@ module.exports = ( app ) => {
 	// ROUTE - CATEGORY
 	app.post( '/api/category', verifyToken, category.create );
 	app.get( '/api/category', verifyToken, category.find );
+
+	// ROUTE - MASTER USER
+	app.get( '/api/master-user', verifyToken, masterUser.find );
 
 	const test = require( '../app/controllers/test.js' );
 	app.get( '/test', test.test );
