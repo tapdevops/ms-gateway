@@ -19,7 +19,9 @@ exports.find = ( req, res ) => {
 		else {
 			url_query = req.query;
 			var url_query_length = Object.keys( url_query ).length;
-
+			url_query = {
+				EMPLOYEE_NIK: /req.query.EMPLOYEE_NIK/
+			}
 			employeeHRISModel.find( url_query )
 			.then( data => {
 				if( !data ) {
