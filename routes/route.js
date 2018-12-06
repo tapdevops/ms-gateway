@@ -83,6 +83,7 @@ module.exports = ( app ) => {
 	app.post( '/api/image/description', verifyToken, microserviceImages.create  );
 	// ROUTE - EMPLOYEE HRIS
 	app.post( '/sync/employee-hris', employeeHRIS.createOrUpdate );
+	app.get( '/api/employee-hris', verifyToken, employeeHRIS.find );
 
 	// ROUTE - EMPLOYEE SAP
 	app.post( '/sync/employee-sap', employeeSAP.createOrUpdate );

@@ -4,9 +4,56 @@ var querystring = require('querystring');
 var url = require( 'url' );
 const date = require( '../libraries/date.js' );
 const dateAndTimes = require( 'date-and-time' );
+let jwt = require( 'jsonwebtoken' );
+const config = require( '../../config/config.js' );
+const uuid = require( 'uuid' );
+const nJwt = require( 'njwt' );
+const jwtDecode = require( 'jwt-decode' );
+
+exports.find = ( req, res ) => {
+
+	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
+		if ( err ) {
+			res.sendStatus( 403 );
+		}
+		else {
+			url_query = req.query;
+			var url_query_length = Object.keys( url_query ).length;
+
+			employeeHRISModel.find( url_query )
+			.then( data => {
+				if( !data ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 2',
+						data: {}
+					} );
+				}
+				res.send( {
+					status: true,
+					message: 'Success',
+					data: data
+				} );
+			} ).catch( err => {
+				if( err.kind === 'ObjectId' ) {
+					return res.send( {
+						status: false,
+						message: 'Data not found 1',
+						data: {}
+					} );
+				}
+				return res.send( {
+					status: false,
+					message: 'Error retrieving data',
+					data: {}
+				} );
+			} );
+		}
+	} );
+
+};
 
 // Create or update data
-
 exports.createOrUpdate = ( req, res ) => {
 	
 	if( !req.body.EMPLOYEE_NIK ) {
