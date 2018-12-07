@@ -51,6 +51,10 @@ app.listen( config.app_port, () => {
 	console.log( config.app_name + ' running on ' + config.app_port )
 } );
 
+app.get( '/', ( req, res ) => {
+	res.json( { 'message': config.app_name } )
+} );
+
 // Login
 app.post( '/api/login', ( req, res ) => {
 
@@ -309,12 +313,6 @@ app.post( '/api/login', ( req, res ) => {
 	}
 } );
 
-
-
-app.get( '/', ( req, res ) => {
-	res.json( { 'message': config.app_name } )
-} );
-
 app.post( '/api/logout', verifyToken, ( req, res) => {
 	nJwt.verify( req.token, config.secret_key, config.token_algorithm, ( err, authData ) => {
 		if ( err ) {
@@ -420,4 +418,26 @@ function verifyToken( req, res, next ) {
 		// Forbidden
 		res.sendStatus( 403 );
 	}
+}
+
+function setHectareStatement() {
+	var client = new Client();
+	var url = config.url.microservices.masterdata_afdeling;
+
+	if ( url_query_length > 0 ) {
+		url = url + req._parsedUrl.search;
+	}
+
+	var args = {
+		headers: { "Content-Type": "application/json" }
+	};
+
+	client.get( url, args, function (data, response) {
+		// parsed response body as js object
+		return { 
+			"status": data.status,
+			"message": data.message,
+			"data": data.data
+		};
+	});
 }
