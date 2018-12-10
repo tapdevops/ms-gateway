@@ -20,9 +20,7 @@ RUN mkdir -p /usr/src/app
 # /usr/src/app
 WORKDIR /usr/src/app
 
-# perintah ini akan melakukan proses copy Gemfile dari komputer
-# kita ke image baru
-COPY Gemfile Gemfile.lock ./
+
 
 # perintah ini akan menjalankan bundle install pada image
 RUN gem install bundler && bundle install --jobs 20
