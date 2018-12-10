@@ -1,21 +1,28 @@
-FROM ruby:2.3.2-alpine
+FROM node:10-alpine
 
-# Kita perlu menginstall packet / library yang akan 
-# dibutuhkan oleh aplikasi kita.
-RUN apk --update add --virtual build-dependencies \
-                               build-base \
-                               libxml2-dev \
-                               libxslt-dev \
-                               zlib-dev \
-                               mysql-dev \
-                               nodejs \
-                               tzdata \
-                               && rm -rf /var/cache/apk/*
+WORKDIR /opt/app
 
-# perintah ini akan membuat sebuah folder bernama app
-# pada image baru kita
-RUN mkdir -p /usr/src/app
+ENV PORT=80
 
-# perintah ini akam merubah folder kerja kita menjadi
-# /usr/src/app
-WORKDIR /usr/src/app
+RUN touch /usr/bin/start.sh # this is the script which will run on start
+
+# if you need a build script, uncomment the line below
+# RUN echo 'sh mybuild.sh' >> /usr/bin/start.sh
+
+# if you need redis, uncomment the lines below
+# RUN apk --update add redis
+# RUN echo 'redis-server &' >> /usr/bin/start.sh
+
+# daemon for cron jobs
+RUN echo 'echo will install crond...' >> /usr/bin/start.sh
+RUN echo 'crond' >> /usr/bin/start.sh
+
+npm install
+
+# Basic npm start verification
+RUN echo 'nb=`cat package.json | grep start | wc -l` && if test "$nb" = "0" ; then echo "*** Boot issue: No start command found in your package.json in the scripts. See https://docs.npmjs.com/cli/start" ; exit 1 ; fi' >> /usr/bin/start.sh
+
+RUN echo 'npm install --production' >> /usr/bin/start.sh
+
+# npm start, make sure to have a start attribute in "scripts" in package.json
+RUN echo 'npm start' >> /usr/bin/start.sh
