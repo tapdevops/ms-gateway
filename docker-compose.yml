@@ -1,13 +1,14 @@
-version: '2'
-
+version: "2"
 services:
-  
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docs/docstage
     ports:
-      - "3000:3000"
+     - "3006:3006"
     volumes:
-      - .:/usr/src/app
-    command: rails server -b 149.129.242.205 -p 3006
-
+     - "./:/usr/src/app"
   
 
 
