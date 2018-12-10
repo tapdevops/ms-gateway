@@ -6,9 +6,9 @@ build:
       dockerfile: Dockerfile
     image: docs/docstage
     ports:
-      - "3006:3006"
+      - "8080:8080"
     volumes:
       - .:/bin/bash
-    command: rails server -b 149.129.242.205 -p 3006
+    command: rails server -b 149.129.242.205 -p 8080
 
   
