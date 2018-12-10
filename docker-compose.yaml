@@ -4,7 +4,7 @@ version: '2'
     ports:
       - "3006:3006"
     volumes:
-      - .:/usr/bin/start.sh
+      - .:/bin/bash
     command: rails server -b 149.129.242.205 -p 3006
 
   
