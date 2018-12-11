@@ -2,7 +2,7 @@ FROM node:10-alpine
 
 WORKDIR /opt/app
 
-ENV PORT=3006
+ENV PORT=80
 
 RUN echo 'set -e' > /usr/bin/start.sh # this is the script which will run on start
 
