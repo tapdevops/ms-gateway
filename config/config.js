@@ -24,15 +24,15 @@ module.exports = {
 	*/
 	url: {
 		microservices: {
-			inspection: 			'http://149.129.242.205:3002/inspection',
-			inspection_header: 		'http://149.129.242.205:3002/inspection-header',
-			inspection_detail: 		'http://149.129.242.205:3002/inspection-detail',
-			inspection_tracking: 	'http://149.129.242.205:3002/inspection-tracking',
-			masterdata_block: 		'http://149.129.242.205:3003/block',
-			masterdata_afdeling:	'http://149.129.242.205:3003/afdeling',
-			images: 				'http://149.129.242.205:3004/image',
-			finding:				'http://149.129.242.205:3005/finding',
-			finding_history:		'http://149.129.242.205:3005/finding-history',
+			inspection: 			'http://149.129.244.86:3002/inspection',
+			inspection_header: 		'http://149.129.244.86:3002/inspection-header',
+			inspection_detail: 		'http://149.129.244.86:3002/inspection-detail',
+			inspection_tracking: 	'http://149.129.244.86:3002/inspection-tracking',
+			masterdata_block: 		'http://149.129.244.86:3003/block',
+			masterdata_afdeling:	'http://149.129.244.86:3003/afdeling',
+			images: 				'http://149.129.244.86:3004/image',
+			finding:				'http://149.129.244.86:3005/finding',
+			finding_history:		'http://149.129.244.86:3005/finding-history',
 			ldap: 					'http://tap-ldapdev.tap-agri.com/login'
 		}
 	}
