@@ -1,26 +1,19 @@
-FROM node:10-alpine
+FROM node:8
 
-WORKDIR /opt/app
+# Create app directory
+WORKDIR /usr/src/app
 
-ENV PORT=80
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
-RUN echo 'set -e' > /usr/bin/start.sh # this is the script which will run on start
+RUN npm install
+# If you are building your code for production
+# RUN npm install --only=production
 
-# if you need a build script, uncomment the line below
-# RUN echo 'sh mybuild.sh' >> /usr/bin/start.sh
+# Bundle app source
+COPY . .
 
-# if you need redis, uncomment the lines below
-# RUN apk --update add redis
-# RUN echo 'redis-server &' >> /usr/bin/start.sh
-
-# daemon for cron jobs
-RUN echo 'echo will install crond...' >> /usr/bin/start.sh
-RUN echo 'crond' >> /usr/bin/start.sh
-
-# Basic npm start verification
-RUN echo 'nb=`cat package.json | grep start | wc -l` && if test "$nb" = "0" ; then echo "*** Boot issue: No start command found in your package.json in the scripts. See https://docs.npmjs.com/cli/start" ; exit 1 ; fi' >> /usr/bin/start.sh
-
-RUN echo 'npm install --production' >> /usr/bin/start.sh
-
-# npm start, make sure to have a start attribute in "scripts" in package.json
-RUN echo 'npm start' >> /usr/bin/start.sh
+EXPOSE 3006
+CMD [ "npm", "start" ]
