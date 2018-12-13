@@ -19,3 +19,7 @@ EXPOSE 3002
 #CMD [ "npm", "start" ]
 #RUN npm install
 RUN node  app.js
+
+
+
+
