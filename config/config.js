@@ -5,7 +5,7 @@ module.exports = {
 	| App Config
 	|--------------------------------------------------------------------------
 	*/
-	app_port: process.env.PORT || 3006,
+	app_port: process.env.PORT || 3008,
 	app_name: 'Microservice Auth',
 
 	/*
@@ -24,9 +24,9 @@ module.exports = {
 	*/
 	url: {
 		microservices: {
-			inspection: 			'http://149.129.244.86:3006/inspection',
-			inspection_header: 		'http://149.129.244.86:3006/inspection-header',
-			inspection_detail: 		'http://149.129.244.86:3006/inspection-detail',
+			inspection: 			'http://149.129.244.86:3008/inspection',
+			inspection_header: 		'http://149.129.244.86:3008/inspection-header',
+			inspection_detail: 		'http://149.129.244.86:3008/inspection-detail',
 			inspection_tracking: 	'http://149.129.244.86:3002/inspection-tracking',
 			masterdata_block: 		'http://149.129.244.86:3003/block',
 			masterdata_afdeling:	'http://149.129.244.86:3003/afdeling',
